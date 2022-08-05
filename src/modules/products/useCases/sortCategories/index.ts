@@ -2,12 +2,15 @@ import { CategoriesRepository } from "../../repositories/implementations/Categor
 import { GroupByIndentationController } from "./GroupByIndentation/GroupByIndentationController";
 import { GroupByIndentationUseCase } from "./GroupByIndentation/GroupByIndentationUseCase";
 
-const categoriesRepository = CategoriesRepository.getInstance();
-const groupByIndentationUseCase = new GroupByIndentationUseCase(
-  categoriesRepository
-);
-const groupByIndentationController = new GroupByIndentationController(
-  groupByIndentationUseCase
-);
+export default (): GroupByIndentationController => {
+  const categoriesRepository = new CategoriesRepository();
 
-export { groupByIndentationController, groupByIndentationUseCase };
+  const groupByIndentationUseCase = new GroupByIndentationUseCase(
+    categoriesRepository
+  );
+  const groupByIndentationController = new GroupByIndentationController(
+    groupByIndentationUseCase
+  );
+
+  return groupByIndentationController;
+};

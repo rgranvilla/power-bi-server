@@ -1,23 +1,14 @@
-import { Category } from "../../model/Category";
-import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
+import { GroupByIndentation } from "../../../../../utils/GroupByIndentation";
+import { Category } from "../../../entities/Category";
+import { ICategoriesRepository } from "../../../repositories/ICategoriesRepository";
 
 class GroupByIndentationUseCase {
   constructor(private categoriesRepository: ICategoriesRepository) {}
 
-  execute(): Category[][] {
-    const listCategories = this.categoriesRepository.list();
+  async execute(): Promise<Category[][]> {
+    const categories = await this.categoriesRepository.list();
 
-    const groupByIndentation = new Array<Category[]>();
-
-    const lastLevel = Math.max(
-      ...listCategories.map(({ indentation }) => indentation)
-    );
-
-    for (let i = 0; i <= lastLevel; i += 1) {
-      groupByIndentation.push(
-        listCategories.filter((category) => category.indentation === i)
-      );
-    }
+    const groupByIndentation = GroupByIndentation(categories);
 
     return groupByIndentation;
   }

@@ -1,12 +1,14 @@
+import { v4 as uuidV4 } from "uuid";
+
 import { ConvertTextToSlugWithoutSpaces } from "../../../../utils/TextNormalizers";
 import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
   title: string;
-  parentTitle: string;
+  parent_title: string;
   indentation: number;
-  icon: string;
-  image: string;
+  icon_url: string;
+  image_url: string;
   priority: number;
   slug?: string;
 }
@@ -14,49 +16,51 @@ interface IRequest {
 class CreateCategoryUseCase {
   constructor(private categoriesRepository: ICategoriesRepository) {}
 
-  execute({
+  async execute({
     title,
-    parentTitle,
+    parent_title,
     indentation,
-    icon,
-    image,
+    icon_url,
+    image_url,
     priority,
-  }: IRequest): void {
-    const parentId = this.categoriesRepository.findParentId(
-      parentTitle,
-      indentation
-    );
+  }: IRequest): Promise<void> {
+    const parent_id = uuidV4();
+
+    // const parent_id = this.categoriesRepository.getParentId(
+    //   parent_title,
+    //   indentation
+    // );
 
     const slug = ConvertTextToSlugWithoutSpaces(title);
 
     const categoriesAlreadyExists =
-      this.categoriesRepository.checkCategoryAlreadyExists(
+      await this.categoriesRepository.checkCategoryAlreadyExists(
         title,
         indentation,
-        parentTitle
+        parent_title
       );
 
     if (categoriesAlreadyExists) {
       throw new Error("Category already exists!");
     }
 
-    const parentCategoryNotExists =
-      !this.categoriesRepository.checkParentCategoryExists(
-        parentTitle,
-        indentation
-      );
+    // const parentCategoryNotExists =
+    //   !this.categoriesRepository.checkParentCategoryExists(
+    //     parent_title,
+    //     indentation
+    //   );
 
-    if (parentCategoryNotExists) {
-      throw new Error("Parent category not exists!");
-    }
+    // if (parentCategoryNotExists) {
+    //   throw new Error("Parent category not exists!");
+    // }
 
     this.categoriesRepository.create({
       title,
-      parentId,
-      parentTitle,
+      parent_id,
+      parent_title,
       indentation,
-      icon,
-      image,
+      icon_url,
+      image_url,
       priority,
       slug,
     });

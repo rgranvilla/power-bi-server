@@ -1,27 +1,27 @@
-import { Category } from "../../model/Category";
+import { GroupByIndentation } from "../../../../utils/GroupByIndentation";
+import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
   INestedCategoryDTO,
 } from "../../repositories/ICategoriesRepository";
-import { groupByIndentationUseCase } from "../sortCategories";
 
 class NestCategoriesUseCase {
   constructor(private categoriesRepository: ICategoriesRepository) {}
 
-  execute(): INestedCategoryDTO[] {
-    const listCategories = this.categoriesRepository.list();
+  async execute(): Promise<INestedCategoryDTO[]> {
+    const categories = await this.categoriesRepository.list();
 
     const nestedCategories = new Array<INestedCategoryDTO>();
-    const sortedCategoriesByIndentation = groupByIndentationUseCase.execute();
+    const sortedCategoriesByIndentation = GroupByIndentation(categories);
 
     const lastLevel = Math.max(
-      ...listCategories.map(({ indentation }) => indentation)
+      ...categories.map(({ indentation }) => indentation)
     );
 
     if (lastLevel === 0) {
       const auxNestedCategories = new Array<INestedCategoryDTO>();
 
-      listCategories.map((category, index) =>
+      categories.map((category, index) =>
         Object.assign(auxNestedCategories, {
           ...auxNestedCategories,
           [index]: { ...category, children: [] },
@@ -40,25 +40,24 @@ class NestCategoriesUseCase {
       const auxNestedCategories = new Array<INestedCategoryDTO>();
 
       const auxParent = sortedCategoriesByIndentation[i - 1];
-      const auxLastChildren =
+      const auxChildren =
         i === lastLevel ? sortedCategoriesByIndentation[i] : nestedCategories;
 
       auxParent.forEach((category, index) => {
         let filteredChildren = new Array<Category>();
 
-        filteredChildren = auxLastChildren.filter(
-          ({ parentId }) => parentId === category.id
+        filteredChildren = auxChildren.filter(
+          (cat: Category) => cat.parent_title === category.title
         );
 
         Object.assign(auxNestedCategories, {
           ...auxNestedCategories,
           [index]: { ...category, children: filteredChildren },
         });
+      });
 
-        Object.assign(nestedCategories, {
-          ...nestedCategories,
-          ...auxNestedCategories,
-        });
+      Object.assign(nestedCategories, {
+        ...auxNestedCategories,
       });
     }
 

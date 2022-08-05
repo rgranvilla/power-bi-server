@@ -5,16 +5,16 @@ import { CreateCategoryUseCase } from "./CreateCategoryUseCase";
 class CreateCategoryController {
   constructor(private createCategoryUseCase: CreateCategoryUseCase) {}
 
-  handle(request: Request, response: Response): Response {
-    const { title, parentTitle, indentation, icon, image, priority } =
+  async handle(request: Request, response: Response): Promise<Response> {
+    const { title, parent_title, indentation, icon_url, image_url, priority } =
       request.body;
 
-    this.createCategoryUseCase.execute({
+    await this.createCategoryUseCase.execute({
       title,
-      parentTitle,
+      parent_title,
       indentation,
-      icon,
-      image,
+      icon_url,
+      image_url,
       priority,
     });
 

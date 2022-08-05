@@ -1,12 +1,12 @@
-import { Category } from "../model/Category";
+import { Category } from "../entities/Category";
 
 interface ICreateCategoryDTO {
   title: string;
-  parentId?: string;
-  parentTitle?: string;
+  parent_id?: string;
+  parent_title?: string;
   indentation: number;
-  icon: string;
-  image: string;
+  icon_url: string;
+  image_url: string;
   priority: number;
   slug: string;
 }
@@ -14,11 +14,11 @@ interface ICreateCategoryDTO {
 interface INestedCategoryDTO {
   id?: string;
   title: string;
-  parentId?: string;
-  parentTitle?: string;
+  parent_id?: string;
+  parent_title?: string;
   indentation: number;
-  icon: string;
-  image: string;
+  icon_url: string;
+  image_url: string;
   priority: number;
   slug: string;
   children: Array<Category>;
@@ -27,26 +27,29 @@ interface INestedCategoryDTO {
 interface ICategoriesRepository {
   create({
     title,
-    parentId,
-    parentTitle,
+    parent_id,
+    parent_title,
     indentation,
-    icon,
-    image,
+    icon_url,
+    image_url,
     priority,
     slug,
-  }: ICreateCategoryDTO): void;
+  }: ICreateCategoryDTO): Promise<void>;
 
-  list(): Category[];
+  list(): Promise<Category[]>;
 
-  findParentId(parentTitle: string, indentation: number): string;
+  getParentId(parent_title: string, indentation: number): Promise<string>;
 
   checkCategoryAlreadyExists(
     title: string,
     indentation: number,
-    parentTitle: string
-  ): boolean;
+    parent_title: string
+  ): Promise<boolean>;
 
-  checkParentCategoryExists(parentTitle: string, indentation: number): boolean;
+  // checkParentCategoryExists(
+  //   parent_title: string,
+  //   indentation: number
+  // ): Promise<boolean>;
 }
 
 export { ICategoriesRepository, ICreateCategoryDTO, INestedCategoryDTO };

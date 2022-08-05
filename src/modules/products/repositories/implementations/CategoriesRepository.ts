@@ -1,62 +1,63 @@
-import { Category } from "../../model/Category";
+import { getRepository, Repository } from "typeorm";
+import { v4 as uuidV4 } from "uuid";
+
+import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
 } from "../ICategoriesRepository";
 
 class CategoriesRepository implements ICategoriesRepository {
-  private categories: Category[];
+  private repository: Repository<Category>;
 
-  private static INSTANCE: CategoriesRepository;
-
-  private constructor() {
-    this.categories = [];
+  constructor() {
+    this.repository = getRepository(Category);
   }
 
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository();
-    }
-    return CategoriesRepository.INSTANCE;
-  }
-
-  create({
+  async create({
     title,
-    parentId,
-    parentTitle,
+    parent_id,
+    parent_title,
     indentation,
-    icon,
-    image,
+    icon_url,
+    image_url,
     priority,
     slug,
-  }: ICreateCategoryDTO): void {
-    const category = new Category();
+  }: ICreateCategoryDTO): Promise<void> {
+    const id = uuidV4();
 
-    Object.assign(category, {
+    const category = await this.repository.save({
+      id,
       title,
-      parentId,
-      parentTitle,
+      parent_id,
+      parent_title,
       indentation,
-      icon,
-      image,
+      icon_url,
+      image_url,
       priority,
       slug,
-      created_at: new Date(),
     });
 
-    this.categories.push(category);
+    await this.repository.save(category);
   }
 
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    const categories = await this.repository.find();
+
+    return categories;
   }
 
-  findParentId(parentTitle: string, indentation: number): string {
-    const category = this.categories.find(
-      (category) =>
-        category.title === parentTitle &&
-        category.indentation === indentation - 1
-    );
+  async getParentId(
+    parent_title: string,
+    indentation: number
+  ): Promise<string> {
+    const parentIndentation = indentation - 1;
+    const category = await this.repository.findOne({
+      where: {
+        title: parent_title,
+        indentation: parentIndentation,
+      },
+    });
 
     if (!category) {
       return "00000000-0000-0000-0000-000000000000";
@@ -65,17 +66,16 @@ class CategoriesRepository implements ICategoriesRepository {
     return category.id;
   }
 
-  checkCategoryAlreadyExists(
+  async checkCategoryAlreadyExists(
     title: string,
     indentation: number,
-    parentTitle: string
-  ): boolean {
-    const category = this.categories.find(
-      (category) =>
-        category.title === title &&
-        category.indentation === indentation &&
-        category.parentTitle === parentTitle
-    );
+    parent_title: string
+  ): Promise<boolean> {
+    const category = await this.repository.findOne({
+      title,
+      indentation,
+      parent_title,
+    });
 
     if (category) {
       return true;
@@ -84,23 +84,26 @@ class CategoriesRepository implements ICategoriesRepository {
     return false;
   }
 
-  checkParentCategoryExists(parentTitle: string, indentation: number): boolean {
-    const category = this.categories.find(
-      (category) =>
-        category.title === parentTitle &&
-        category.indentation === indentation - 1
-    );
+  // checkParentCategoryExists(
+  //   parent_title: string,
+  //   indentation: number
+  // ): boolean {
+  //   const category = this.categories.find(
+  //     (category) =>
+  //       category.title === parent_title &&
+  //       category.indentation === indentation - 1
+  //   );
 
-    if (category) {
-      return true;
-    }
+  //   if (category) {
+  //     return true;
+  //   }
 
-    if (parentTitle === "root" && indentation === 0) {
-      return true;
-    }
+  //   if (parent_title === "root" && indentation === 0) {
+  //     return true;
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 }
 
 export { CategoriesRepository };
