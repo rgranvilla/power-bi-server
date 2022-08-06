@@ -1,0 +1,10 @@
+Estofados, root, 0, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Móveis, root, 0, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Sofá, Estofados, 1, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Sofá 2 lugares, Sofá, 2, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Sofá 3 lugares, Sofá, 2, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Sofá Retrátil, Sofá, 2, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Poltronas, Estofados, 1, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Fixas, Poltronas, 2, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Reclináveis, Poltronas, 2, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1
+Mesas, Móveis, 1, https://teste_de_endereco_icon/icon12345.jpg, https://teste_de_endereco_image/image12345.jpg, 1

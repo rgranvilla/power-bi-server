@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
 
 import { GroupByIndentationUseCase } from "./GroupByIndentationUseCase";
 
 class GroupByIndentationController {
-  constructor(private groupByIndentationUseCase: GroupByIndentationUseCase) {}
-
   async handle(request: Request, response: Response): Promise<Response> {
-    const sortedCategories = await this.groupByIndentationUseCase.execute();
+    const groupByIndentationUseCase = container.resolve(
+      GroupByIndentationUseCase
+    );
+    const sortedCategories = await groupByIndentationUseCase.execute();
 
     return response.json(sortedCategories);
   }

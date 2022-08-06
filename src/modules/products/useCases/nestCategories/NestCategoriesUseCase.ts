@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { GroupByIndentation } from "../../../../utils/GroupByIndentation";
 import { Category } from "../../entities/Category";
 import {
@@ -5,8 +7,12 @@ import {
   INestedCategoryDTO,
 } from "../../repositories/ICategoriesRepository";
 
+@injectable()
 class NestCategoriesUseCase {
-  constructor(private categoriesRepository: ICategoriesRepository) {}
+  constructor(
+    @inject("CategoriesRepository")
+    private categoriesRepository: ICategoriesRepository
+  ) {}
 
   async execute(): Promise<INestedCategoryDTO[]> {
     const categories = await this.categoriesRepository.list();

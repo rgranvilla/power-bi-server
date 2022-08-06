@@ -1,3 +1,4 @@
+import { inject, injectable } from "tsyringe";
 import { v4 as uuidV4 } from "uuid";
 
 import { ConvertTextToSlugWithoutSpaces } from "../../../../utils/TextNormalizers";
@@ -13,8 +14,12 @@ interface IRequest {
   slug?: string;
 }
 
+@injectable()
 class CreateCategoryUseCase {
-  constructor(private categoriesRepository: ICategoriesRepository) {}
+  constructor(
+    @inject("CategoriesRepository")
+    private categoriesRepository: ICategoriesRepository
+  ) {}
 
   async execute({
     title,
