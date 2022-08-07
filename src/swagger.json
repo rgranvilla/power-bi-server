@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "DivinoDesign Documentation",
+    "title": "Devtrail E-Commerce API Documentation",
     "description": "This is an API E-commerce",
     "version": "1.0.0",
     "contact": {
@@ -12,7 +12,7 @@
     "/categories": {
       "description": "Create a category.",
       "post": {
-        "tags": ["Category"],
+        "tags": ["Categories"],
         "summary": "Create a category",
         "description": "Create a new category.",
         "requestBody": {
@@ -64,7 +64,7 @@
         }
       },
       "get": {
-        "tags": ["Category"],
+        "tags": ["Categories"],
         "summary": "List all categories",
         "description": "List all categories.",
         "responses": {
@@ -123,6 +123,206 @@
         }
       }
         
+    },
+    "/categories/import": {
+      "description": "Import categories from csv file.",
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Import categories from csv file",
+        "description": "Create new categories from csv file import.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/categories/group/by_indentation":{
+      "description": "Group categories by indentation.",
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Group categories by indentation",
+        "description": "Group categories by indentation.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "parent_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "parent_title": {
+                        "type": "string"
+                      },
+                      "indentation": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "icon_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
+                      },
+                      "image_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/image"
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/nest": {
+      "description": "Nest categories",
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Nest all categories by parent/children categories",
+        "description": "Nest all categories by parent/children categories.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "parent_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "parent_title": {
+                        "type": "string"
+                      },
+                      "indentation": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "icon_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
+                      },
+                      "image_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/image"
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "children": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "parent_id": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "parent_title": {
+                              "type": "string"
+                            },
+                            "indentation": {
+                              "type": "integer",
+                              "format": "int32"
+                            },
+                            "icon_url": {
+                              "type": "string",
+                              "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
+                            },
+                            "image_url": {
+                              "type": "string",
+                              "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/image"
+                            },
+                            "priority": {
+                              "type": "integer",
+                              "format": "int32"
+                            },
+                            "slug": {
+                              "type": "string"
+                            },
+                            "children": {
+                              "example": "[{children},{children},{children}]"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date"
+                            }
+                          }
+                        }
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

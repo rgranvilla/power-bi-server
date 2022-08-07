@@ -23,10 +23,10 @@ categoriesRoutes.post("/", createCategoryController.handle);
 
 categoriesRoutes.get("/", listCategoriesController.handle);
 
-categoriesRoutes.get("/nest_categories", nestCategoriesController.handle);
+categoriesRoutes.get("/nest", nestCategoriesController.handle);
 
 categoriesRoutes.get(
-  "/group_by_indentation",
+  "/group/by_indentation",
   groupByIndentationController.handle
 );
 
