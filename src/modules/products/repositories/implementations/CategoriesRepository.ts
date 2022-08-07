@@ -26,7 +26,7 @@ class CategoriesRepository implements ICategoriesRepository {
   }: ICreateCategoryDTO): Promise<void> {
     const id = uuidV4();
 
-    const category = await this.repository.save({
+    const category = this.repository.create({
       id,
       title,
       parent_id,

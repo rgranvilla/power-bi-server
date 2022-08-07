@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DivinoDesign Documentation",
+    "description": "This is an API E-commerce",
+    "version": "1.0.0",
+    "contact": {
+      "email": "developerstrail@gmail.com"
+    }
+  },
+  "paths": {
+    "/categories": {
+      "description": "Create a category.",
+      "post": {
+        "tags": ["Category"],
+        "summary": "Create a category",
+        "description": "Create a new category.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "types": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "parent_title": {
+                    "type": "string"
+                  },
+                  "indentation": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "icon_url": {
+                    "type": "string"
+                  },
+                  "image_url": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                },
+                "example": {
+                  "title": "Category title sample",
+                  "parent_title": "Category parent_title sample",
+                  "indentation": 0,
+                  "icon_url": "Category icon url",
+                  "image_url": "Category image url",
+                  "priority": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Category already exists!"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Category"],
+        "summary": "List all categories",
+        "description": "List all categories.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "parent_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "parent_title": {
+                        "type": "string"
+                      },
+                      "indentation": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "icon_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
+                      },
+                      "image_url": {
+                        "type": "string",
+                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/image"
+                      },
+                      "priority": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+        
+    }
+  }
+}
