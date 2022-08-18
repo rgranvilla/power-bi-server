@@ -40,7 +40,7 @@ export class CreateEmployees1660845497881 implements MigrationInterface {
             type: "varchar",
           },
           {
-            name: "leader_id",
+            name: "leader_username",
             type: "varchar",
           },
           {

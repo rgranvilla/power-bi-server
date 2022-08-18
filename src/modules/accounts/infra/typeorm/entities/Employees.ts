@@ -28,7 +28,7 @@ class Employees {
   password: string;
 
   @Column()
-  leader_id: string;
+  leader_username: string;
 
   @Column()
   gender: string;

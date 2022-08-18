@@ -1,6 +1,10 @@
+import { hash } from "bcrypt";
 import { getRepository, Repository } from "typeorm";
 
-import { ICreateEmployeesDTO } from "@modules/accounts/dtos/ICreateEmployeesDTO";
+import {
+  ICreateEmployeesDTO,
+  IFindEmployeesDTO,
+} from "@modules/accounts/dtos/ICreateEmployeesDTO";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
 
 import { Employees } from "../entities/Employees";
@@ -20,11 +24,13 @@ class EmployeesRepository implements IEmployeesRepository {
     access_level,
     email,
     password,
-    leader_id,
+    leader_username,
     gender,
     birthday,
     hire_date,
   }: ICreateEmployeesDTO): Promise<void> {
+    const passwordHash = await hash(password, 8);
+
     const employees = this.repository.create({
       first_name,
       last_name,
@@ -32,14 +38,25 @@ class EmployeesRepository implements IEmployeesRepository {
       username,
       access_level,
       email,
-      password,
-      leader_id,
+      password: passwordHash,
+      leader_username,
       gender,
       birthday,
       hire_date,
     });
 
     await this.repository.save(employees);
+  }
+
+  async findByEmployees({
+    username,
+    email,
+  }: IFindEmployeesDTO): Promise<Employees> {
+    const employees = await this.repository.findOne({
+      where: [{ username }, { email }],
+    });
+
+    return employees;
   }
 }
 
