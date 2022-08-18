@@ -52,11 +52,11 @@ class EmployeesRepository implements IEmployeesRepository {
     username,
     email,
   }: IFindEmployeesDTO): Promise<Employees> {
-    const employees = await this.repository.findOne({
+    const employee = await this.repository.findOne({
       where: [{ username }, { email }],
     });
 
-    return employees;
+    return employee;
   }
 }
 
