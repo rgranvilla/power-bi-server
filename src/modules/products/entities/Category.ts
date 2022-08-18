@@ -10,28 +10,25 @@ class Category {
   title: string;
 
   @Column()
-  parent_id?: string;
+  parent_id: string;
 
   @Column()
-  parent_title?: string;
+  parent_title: string;
 
   @Column()
-  indentation: number;
+  category_level: number;
 
   @Column()
   icon_url: string;
 
   @Column()
-  image_url: string;
-
-  @Column()
-  priority: number;
-
-  @Column()
-  slug?: string;
+  slug: string;
 
   @CreateDateColumn()
-  created_at?: Date;
+  created_at: Date;
+
+  @CreateDateColumn()
+  updated_at: Date;
 
   constructor() {
     if (!this.id) {

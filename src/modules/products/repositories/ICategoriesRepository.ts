@@ -2,24 +2,41 @@ import { Category } from "../entities/Category";
 
 interface ICreateCategoryDTO {
   title: string;
-  parent_id?: string;
-  parent_title?: string;
-  indentation: number;
-  icon_url: string;
-  image_url: string;
-  priority: number;
+  parent_id: string;
+  parent_title: string;
+  category_level: number;
+  icon_url?: string;
   slug: string;
 }
 
-interface INestedCategoryDTO {
-  id?: string;
+interface ICheckCategoryExistDTO {
   title: string;
-  parent_id?: string;
-  parent_title?: string;
-  indentation: number;
+  parent_title: string;
+  category_level: number;
+}
+
+interface IGetParentCategoryDTO {
+  parent_title: string;
+  parent_level: number;
+}
+interface IGetParentIdDTO {
+  parent_title: string;
+  parent_level: number;
+}
+
+interface IGetCategoryDTO {
+  title: string;
+  parent_title: string;
+  category_level: number;
+}
+
+interface INestedCategoriesDTO {
+  id: string;
+  title: string;
+  parent_id: string;
+  parent_title: string;
+  category_level: number;
   icon_url: string;
-  image_url: string;
-  priority: number;
   slug: string;
   children: Array<Category>;
 }
@@ -29,27 +46,41 @@ interface ICategoriesRepository {
     title,
     parent_id,
     parent_title,
-    indentation,
+    category_level,
     icon_url,
-    image_url,
-    priority,
     slug,
   }: ICreateCategoryDTO): Promise<void>;
 
   list(): Promise<Category[]>;
 
-  getParentId(parent_title: string, indentation: number): Promise<string>;
+  checkCategoryExists({
+    title,
+    parent_title,
+    category_level,
+  }: ICheckCategoryExistDTO): Promise<boolean>;
 
-  checkCategoryAlreadyExists(
-    title: string,
-    indentation: number,
-    parent_title: string
-  ): Promise<boolean>;
+  getParentCategory({
+    parent_title,
+    parent_level,
+  }: IGetParentCategoryDTO): Promise<Category>;
 
-  // checkParentCategoryExists(
-  //   parent_title: string,
-  //   indentation: number
-  // ): Promise<boolean>;
+  getParentId(parentCategory: Category): Promise<string>;
+
+  getCategory({
+    title,
+    parent_title,
+    category_level,
+  }: IGetCategoryDTO): Promise<Category>;
+
+  nestCategories(): Promise<INestedCategoriesDTO>;
 }
 
-export { ICategoriesRepository, ICreateCategoryDTO, INestedCategoryDTO };
+export {
+  ICategoriesRepository,
+  ICreateCategoryDTO,
+  ICheckCategoryExistDTO,
+  IGetParentCategoryDTO,
+  IGetParentIdDTO,
+  IGetCategoryDTO,
+  INestedCategoriesDTO,
+};

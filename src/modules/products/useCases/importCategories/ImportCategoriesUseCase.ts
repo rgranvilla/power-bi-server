@@ -2,16 +2,14 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { inject, injectable } from "tsyringe";
 
-import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
-import { CreateCategoryUseCase } from "../createCategories/CreateCategoryUseCase";
+import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
+import { ConvertTextToSlugWithoutSpaces } from "@utils/TextNormalizers";
 
-interface IImportCategories {
+interface IImportCategory {
   title: string;
   parent_title: string;
-  indentation: number;
+  category_level: number;
   icon_url: string;
-  image_url: string;
-  priority: number;
 }
 
 @injectable()
@@ -21,14 +19,10 @@ class ImportCategoriesUseCase {
     private categoriesRepository: ICategoriesRepository
   ) {}
 
-  private createCategoryUseCase = new CreateCategoryUseCase(
-    this.categoriesRepository
-  );
-
-  loadCategories(file: Express.Multer.File): Promise<IImportCategories[]> {
+  loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
-      const categories: IImportCategories[] = [];
+      const categories: IImportCategory[] = [];
 
       const parseFile = parse();
 
@@ -36,28 +30,18 @@ class ImportCategoriesUseCase {
 
       parseFile
         .on("data", async (line) => {
-          const [
-            title,
-            parent_title,
-            indentation,
-            icon_url,
-            image_url,
-            priority,
-          ] = line;
+          const [title, parent_title, category_level, icon_url] = line;
 
           // used to eliminate whitespace before value from string values returned
           const parseTitle = String(title).trim();
           const parseParentTitle = String(parent_title).trim();
           const parseIconUrl = String(icon_url).trim();
-          const parseImageUrl = String(image_url).trim();
 
           categories.push({
             title: parseTitle,
             parent_title: parseParentTitle,
-            indentation,
+            category_level,
             icon_url: parseIconUrl,
-            image_url: parseImageUrl,
-            priority,
           });
         })
         .on("end", () => {
@@ -70,40 +54,61 @@ class ImportCategoriesUseCase {
     });
   }
 
+  orderCategories(categories: IImportCategory[]): IImportCategory[] {
+    const orderedCategories = categories.sort(
+      (a, b) => a.category_level - b.category_level
+    );
+
+    return orderedCategories;
+  }
+
+  async createCategory(categories: IImportCategory[]): Promise<void> {
+    if (categories.length > 0) {
+      const category = categories.shift();
+
+      const { title, parent_title, category_level, icon_url } = category;
+
+      const slug = ConvertTextToSlugWithoutSpaces(title);
+
+      const parent_level = category_level - 1;
+
+      const parentCategory = await this.categoriesRepository.getParentCategory({
+        parent_title,
+        parent_level,
+      });
+
+      const parent_id = await this.categoriesRepository.getParentId(
+        parentCategory
+      );
+
+      const categoryAlreadyExists =
+        await this.categoriesRepository.checkCategoryExists({
+          title,
+          parent_title,
+          category_level,
+        });
+
+      if (!categoryAlreadyExists) {
+        await this.categoriesRepository.create({
+          title,
+          parent_id,
+          parent_title,
+          category_level,
+          icon_url,
+          slug,
+        });
+      }
+
+      this.createCategory(categories);
+    }
+  }
+
   async execute(file: Express.Multer.File): Promise<void> {
     const categories = await this.loadCategories(file);
 
-    // group by indentation (ASC)
-    categories.sort((a, b) => a.indentation - b.indentation);
+    const orderedCategories = this.orderCategories(categories);
 
-    categories.map(async (category) => {
-      const {
-        title,
-        parent_title,
-        indentation,
-        icon_url,
-        image_url,
-        priority,
-      } = category;
-
-      const existCategory =
-        await this.categoriesRepository.checkCategoryAlreadyExists(
-          title,
-          indentation,
-          parent_title
-        );
-
-      if (!existCategory) {
-        this.createCategoryUseCase.execute({
-          title,
-          parent_title,
-          indentation,
-          icon_url,
-          image_url,
-          priority,
-        });
-      }
-    });
+    await this.createCategory(orderedCategories);
   }
 }
 

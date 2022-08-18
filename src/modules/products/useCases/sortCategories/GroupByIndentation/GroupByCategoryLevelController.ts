@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { GroupByIndentationUseCase } from "./GroupByIndentationUseCase";
+import { GroupByCategoryLevelUseCase } from "./GroupByCategoryLevelUseCase";
 
-class GroupByIndentationController {
+class GroupByCategoryLevelController {
   async handle(request: Request, response: Response): Promise<Response> {
     const groupByIndentationUseCase = container.resolve(
-      GroupByIndentationUseCase
+      GroupByCategoryLevelUseCase
     );
     const sortedCategories = await groupByIndentationUseCase.execute();
 
@@ -14,4 +14,4 @@ class GroupByIndentationController {
   }
 }
 
-export { GroupByIndentationController };
+export { GroupByCategoryLevelController };

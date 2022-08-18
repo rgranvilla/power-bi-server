@@ -1,17 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { v4 as uuidV4 } from "uuid";
 
-import { ConvertTextToSlugWithoutSpaces } from "../../../../utils/TextNormalizers";
-import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
+import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
+import { AppError } from "@shared/errors/AppErrors";
+import { ConvertTextToSlugWithoutSpaces } from "@utils/TextNormalizers";
 
 interface IRequest {
   title: string;
   parent_title: string;
-  indentation: number;
-  icon_url: string;
-  image_url: string;
-  priority: number;
-  slug?: string;
+  category_level: number;
+  icon_url?: string;
 }
 
 @injectable()
@@ -24,49 +21,41 @@ class CreateCategoryUseCase {
   async execute({
     title,
     parent_title,
-    indentation,
+    category_level,
     icon_url,
-    image_url,
-    priority,
   }: IRequest): Promise<void> {
-    const parent_id = uuidV4();
-
-    // const parent_id = this.categoriesRepository.getParentId(
-    //   parent_title,
-    //   indentation
-    // );
-
     const slug = ConvertTextToSlugWithoutSpaces(title);
 
-    const categoriesAlreadyExists =
-      await this.categoriesRepository.checkCategoryAlreadyExists(
+    const categoryAlreadyExists =
+      await this.categoriesRepository.checkCategoryExists({
         title,
-        indentation,
-        parent_title
-      );
+        parent_title,
+        category_level,
+      });
 
-    if (categoriesAlreadyExists) {
-      throw new Error("Category already exists!");
+    if (categoryAlreadyExists) {
+      throw new AppError("Category already exists!");
     }
 
-    // const parentCategoryNotExists =
-    //   !this.categoriesRepository.checkParentCategoryExists(
-    //     parent_title,
-    //     indentation
-    //   );
+    const parent_level = category_level - 1;
 
-    // if (parentCategoryNotExists) {
-    //   throw new Error("Parent category not exists!");
-    // }
+    const parentCategory = await this.categoriesRepository.getParentCategory({
+      parent_title,
+      parent_level,
+    });
+
+    if (!parentCategory) {
+      throw new AppError("Parent category doesn't exists");
+    }
+
+    const parent_id = parentCategory.id;
 
     this.categoriesRepository.create({
       title,
       parent_id,
       parent_title,
-      indentation,
+      category_level,
       icon_url,
-      image_url,
-      priority,
       slug,
     });
   }

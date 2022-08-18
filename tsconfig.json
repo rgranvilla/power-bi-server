@@ -5,6 +5,18 @@
     "emitDecoratorMetadata": true,
     "module": "commonjs",
     "rootDir": "./",
+    "baseUrl": "src/",
+    "paths": {
+      "@modules/*": [
+        "modules/*"
+      ],
+      "@shared/*": [
+        "shared/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ]
+    },
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,

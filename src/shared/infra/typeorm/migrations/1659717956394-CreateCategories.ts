@@ -17,14 +17,14 @@ export class CreateCategories1659717956394 implements MigrationInterface {
           },
           {
             name: "parent_id",
-            type: "varchar",
+            type: "uuid",
           },
           {
             name: "parent_title",
             type: "varchar",
           },
           {
-            name: "indentation",
+            name: "category_level",
             type: "int",
           },
           {
@@ -32,19 +32,16 @@ export class CreateCategories1659717956394 implements MigrationInterface {
             type: "varchar",
           },
           {
-            name: "image_url",
-            type: "varchar",
-          },
-          {
-            name: "priority",
-            type: "int",
-          },
-          {
             name: "slug",
             type: "varchar",
           },
           {
             name: "created_at",
+            type: "timestamp",
+            default: "now()",
+          },
+          {
+            name: "updated_at",
             type: "timestamp",
             default: "now()",
           },
