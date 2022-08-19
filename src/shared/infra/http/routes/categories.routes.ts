@@ -5,7 +5,7 @@ import { CreateCategoryController } from "@modules/products/useCases/Categories/
 import { ImportCategoriesController } from "@modules/products/useCases/Categories/importCategories/ImportCategoriesController";
 import { ListCategoriesController } from "@modules/products/useCases/Categories/listCategories/ListCategoriesController";
 import { NestCategoriesController } from "@modules/products/useCases/Categories/nestCategories/NestCategoriesController";
-import { GroupByCategoryLevelController } from "@modules/products/useCases/Categories/sortCategories/GroupByIndentation/GroupByCategoryLevelController";
+import { GroupByCategoryLevelController } from "@modules/products/useCases/Categories/sortCategories/GroupByCategoryLevel/GroupByCategoryLevelController";
 
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 

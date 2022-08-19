@@ -47,7 +47,7 @@ describe("Create category", () => {
     );
   });
 
-  it("shouldn't be able to create a category already exists", async () => {
+  it("shouldn't be able to create category already exists", async () => {
     expect(async () => {
       const category = {
         title: "Category title test",
@@ -75,7 +75,7 @@ describe("Create category", () => {
     });
   });
 
-  it("shouldn't be able to create a category with non-existent parent category", async () => {
+  it("shouldn't be able to create category without existent parent category", async () => {
     expect(async () => {
       const category = {
         title: "Category title test",
