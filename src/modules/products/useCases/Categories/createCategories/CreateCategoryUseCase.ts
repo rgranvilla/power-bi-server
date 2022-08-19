@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
 import { AppError } from "@shared/errors/AppErrors";
-import { ConvertTextToSlugWithoutSpaces } from "@utils/TextNormalizers";
+import { convertTextToSlugWithoutSpaces } from "@utils/textNormalizers";
 
 interface IRequest {
   title: string;
@@ -24,7 +24,7 @@ class CreateCategoryUseCase {
     category_level,
     icon_url,
   }: IRequest): Promise<void> {
-    const slug = ConvertTextToSlugWithoutSpaces(title);
+    const slug = convertTextToSlugWithoutSpaces(title);
 
     const categoryAlreadyExists =
       await this.categoriesRepository.checkCategoryExists({

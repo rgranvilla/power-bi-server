@@ -3,6 +3,7 @@ import { getRepository, Repository } from "typeorm";
 
 import {
   ICreateEmployeesDTO,
+  IFindById,
   IFindEmployeesDTO,
 } from "@modules/accounts/dtos/ICreateEmployeesDTO";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
@@ -17,10 +18,12 @@ class EmployeesRepository implements IEmployeesRepository {
   }
 
   async create({
+    id,
     first_name,
     last_name,
     position,
     username,
+    avatar,
     access_level,
     email,
     password,
@@ -32,10 +35,12 @@ class EmployeesRepository implements IEmployeesRepository {
     const passwordHash = await hash(password, 8);
 
     const employees = this.repository.create({
+      id,
       first_name,
       last_name,
       position,
       username,
+      avatar,
       access_level,
       email,
       password: passwordHash,
@@ -46,6 +51,12 @@ class EmployeesRepository implements IEmployeesRepository {
     });
 
     await this.repository.save(employees);
+  }
+
+  async findById({ id }: IFindById): Promise<Employees> {
+    const employee = await this.repository.findOne(id);
+
+    return employee;
   }
 
   async findByEmployees({

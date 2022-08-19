@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { Category } from "@modules/products/entities/Category";
 import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
-import { GroupByCategoryLevel } from "@utils/GroupByCategoryLevel";
+import { groupByCategoryLevel } from "@utils/groupCategories";
 
 @injectable()
 class GroupByCategoryLevelUseCase {
@@ -14,9 +14,9 @@ class GroupByCategoryLevelUseCase {
   async execute(): Promise<Category[][]> {
     const categories = await this.categoriesRepository.list();
 
-    const groupByIndentation = GroupByCategoryLevel(categories);
+    const groupedCategories = groupByCategoryLevel(categories);
 
-    return groupByIndentation;
+    return groupedCategories;
   }
 }
 

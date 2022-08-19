@@ -7,6 +7,8 @@ import { ListCategoriesController } from "@modules/products/useCases/Categories/
 import { NestCategoriesController } from "@modules/products/useCases/Categories/nestCategories/NestCategoriesController";
 import { GroupByCategoryLevelController } from "@modules/products/useCases/Categories/sortCategories/GroupByIndentation/GroupByCategoryLevelController";
 
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
+
 const categoriesRoutes = Router();
 
 const upload = multer({
@@ -16,11 +18,14 @@ const upload = multer({
 const createCategoryController = new CreateCategoryController();
 const listCategoriesController = new ListCategoriesController();
 const nestCategoriesController = new NestCategoriesController();
+const importCategoriesController = new ImportCategoriesController();
 const groupByCategoryLevelController = new GroupByCategoryLevelController();
 
-const importCategoriesController = new ImportCategoriesController();
-
-categoriesRoutes.post("/", createCategoryController.handle);
+categoriesRoutes.post(
+  "/",
+  ensureAuthenticated,
+  createCategoryController.handle
+);
 
 categoriesRoutes.get("/", listCategoriesController.handle);
 
@@ -33,6 +38,7 @@ categoriesRoutes.get(
 
 categoriesRoutes.post(
   "/import",
+  ensureAuthenticated,
   upload.single("file"),
   importCategoriesController.handle
 );

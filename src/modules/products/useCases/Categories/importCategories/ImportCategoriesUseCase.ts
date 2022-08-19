@@ -3,7 +3,7 @@ import fs from "fs";
 import { inject, injectable } from "tsyringe";
 
 import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
-import { ConvertTextToSlugWithoutSpaces } from "@utils/TextNormalizers";
+import { convertTextToSlugWithoutSpaces } from "@utils/textNormalizers";
 
 interface IImportCategory {
   title: string;
@@ -68,7 +68,7 @@ class ImportCategoriesUseCase {
 
       const { title, parent_title, category_level, icon_url } = category;
 
-      const slug = ConvertTextToSlugWithoutSpaces(title);
+      const slug = convertTextToSlugWithoutSpaces(title);
 
       const parent_level = category_level - 1;
 

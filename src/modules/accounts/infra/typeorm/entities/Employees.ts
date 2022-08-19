@@ -19,6 +19,9 @@ class Employees {
   username: string;
 
   @Column()
+  avatar: string;
+
+  @Column()
   access_level: number;
 
   @Column()

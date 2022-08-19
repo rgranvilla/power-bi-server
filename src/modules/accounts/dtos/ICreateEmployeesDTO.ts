@@ -4,6 +4,7 @@ interface ICreateEmployeesDTO {
   last_name: string;
   position: string;
   username: string;
+  avatar?: string;
   access_level: number;
   email: string;
   password: string;
@@ -13,9 +14,12 @@ interface ICreateEmployeesDTO {
   hire_date: Date;
 }
 
+interface IFindById {
+  id: string;
+}
 interface IFindEmployeesDTO {
   username?: string;
   email?: string;
 }
 
-export { ICreateEmployeesDTO, IFindEmployeesDTO };
+export { ICreateEmployeesDTO, IFindEmployeesDTO, IFindById };

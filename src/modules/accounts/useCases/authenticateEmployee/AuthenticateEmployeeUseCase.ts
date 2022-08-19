@@ -1,4 +1,5 @@
 import { compare } from "bcrypt";
+import auth from "config/auth";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
@@ -47,7 +48,7 @@ class AuthenticateEmployeeUseCase {
       throw new AppError("Username, email or password incorrect!");
     }
 
-    const token = sign({}, "9b68406166b82ef425cc27a49557a239", {
+    const token = sign({}, auth.secret_token, {
       subject: employee.id,
       expiresIn: "1d",
     });
