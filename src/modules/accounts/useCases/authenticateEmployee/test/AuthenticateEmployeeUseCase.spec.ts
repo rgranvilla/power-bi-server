@@ -1,8 +1,8 @@
 import { ICreateEmployeeDTO } from "@modules/accounts/dtos/ICreateEmployeeDTO";
 import { EmployeesRepositoryInMemory } from "@modules/accounts/repositories/in-memory/EmployeesRepositoryInMemory";
 
-import { CreateEmployeeUseCase } from "../createEmployee/CreateEmployeeUseCase";
-import { AuthenticateEmployeeUseCase } from "./AuthenticateEmployeeUseCase";
+import { CreateEmployeeUseCase } from "../../createEmployee/CreateEmployeeUseCase";
+import { AuthenticateEmployeeUseCase } from "../AuthenticateEmployeeUseCase";
 
 let authenticateEmployeeUseCase: AuthenticateEmployeeUseCase;
 let employeesRepositoryInMemory: EmployeesRepositoryInMemory;

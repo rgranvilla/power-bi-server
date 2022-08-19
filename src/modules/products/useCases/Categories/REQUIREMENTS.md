@@ -6,22 +6,22 @@ Obs: the "user" term are used to represent both employee and customer.
 ## Register category
 
 ### **FR** => Functional requirements
-[] - Should be able to create a new category.
+[x] - Should be able to create a new category.
 
 ### **BR** => Business Rules
-[] - Must be an employee authenticated to create categories.
-[] - Shouldn't be able to create category already exists.
-[] - Shouldn't be able to create category without existent parent category.
+[x] - Must be an employee authenticated to create categories.
+[x] - Shouldn't be able to create category already exists.
+[x] - Shouldn't be able to create category without existent parent category.
 
 --------------------------------------------------------------------------------
 
 ## List Category
 
 ### **FR** => Functional requirements
-[] - Should be able list all categories.
+[x] - Should be able list all categories.
 
 ### **BR** => Business Rules
-[] - Shouldn't need be an employee or customer authenticated to list categories.
+[x] - Shouldn't need be an employee or customer authenticated to list categories.
 
 --------------------------------------------------------------------------------
 
@@ -30,6 +30,9 @@ Obs: the "user" term are used to represent both employee and customer.
 ### **FR** => Functional requirements
 [] - Should be able to import csv categories files.
 [] - Should be able to create an imported category.
+
+### **FNR** => Functional not requirements
+[] - Use multer to upload files
 
 ### **BR** => Business Rules
 [] - Must be an employee authenticated to import categories.

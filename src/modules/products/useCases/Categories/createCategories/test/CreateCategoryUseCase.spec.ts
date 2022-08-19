@@ -1,7 +1,7 @@
 import { CategoriesRepositoryInMemory } from "@modules/products/repositories/in-memory/CategoryRepositoryInMemory";
 import { convertTextToSlugWithoutSpaces } from "@utils/textNormalizers";
 
-import { CreateCategoryUseCase } from "./CreateCategoryUseCase";
+import { CreateCategoryUseCase } from "../CreateCategoryUseCase";
 
 let createCategoryUseCase: CreateCategoryUseCase;
 let categoriesRepositoryInMemory: CategoriesRepositoryInMemory;
@@ -14,19 +14,14 @@ describe("Create category", () => {
     );
   });
 
-  it("should be able to create a new category", async () => {
+  it("Should be able to create a new category.", async () => {
     const category = {
       title: "Category title test",
       parent_title: "Root",
       category_level: 1,
       icon_url: "",
     };
-    await createCategoryUseCase.execute({
-      title: category.title,
-      parent_title: category.parent_title,
-      category_level: category.category_level,
-      icon_url: category.icon_url,
-    });
+    await createCategoryUseCase.execute(category);
 
     const categoryCreated = await categoriesRepositoryInMemory.getCategory({
       title: category.title,
@@ -47,7 +42,7 @@ describe("Create category", () => {
     );
   });
 
-  it("shouldn't be able to create category already exists", async () => {
+  it("Shouldn't be able to create category already exists.", async () => {
     expect(async () => {
       const category = {
         title: "Category title test",
@@ -75,7 +70,7 @@ describe("Create category", () => {
     });
   });
 
-  it("shouldn't be able to create category without existent parent category", async () => {
+  it("Shouldn't be able to create category without existent parent category.", async () => {
     expect(async () => {
       const category = {
         title: "Category title test",
