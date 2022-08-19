@@ -14,7 +14,7 @@ interface ICreateEmployeesDTO {
   hire_date: Date;
 }
 
-interface IFindById {
+interface IFindByIdDTO {
   id: string;
 }
 interface IFindEmployeesDTO {
@@ -22,4 +22,4 @@ interface IFindEmployeesDTO {
   email?: string;
 }
 
-export { ICreateEmployeesDTO, IFindEmployeesDTO, IFindById };
+export { ICreateEmployeesDTO, IFindEmployeesDTO, IFindByIdDTO };

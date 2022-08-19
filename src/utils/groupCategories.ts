@@ -1,4 +1,4 @@
-import { Category } from "@modules/products/entities/Category";
+import { Category } from "@modules/products/infra/typeorm/entities/Category";
 
 function groupByCategoryLevel(categories: Category[]) {
   const grouped = new Array<Category[]>();

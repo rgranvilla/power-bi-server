@@ -2,7 +2,7 @@ import {
   ICreateEmployeesDTO,
   IFindByIdDTO,
   IFindEmployeesDTO,
-} from "../dtos/ICreateEmployeesDTO";
+} from "../dtos/IEmployeesDTO";
 import { Employees } from "../infra/typeorm/entities/Employees";
 
 interface IEmployeesRepository {

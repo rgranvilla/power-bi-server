@@ -5,7 +5,7 @@ import {
   ICreateEmployeesDTO,
   IFindByIdDTO,
   IFindEmployeesDTO,
-} from "@modules/accounts/dtos/ICreateEmployeesDTO";
+} from "@modules/accounts/dtos/IEmployeesDTO";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
 
 import { Employees } from "../entities/Employees";

@@ -1,9 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
-import {
-  ICategoriesRepository,
-  INestedCategoriesDTO,
-} from "@modules/products/repositories/ICategoriesRepository";
+import { INestedCategoriesDTO } from "@modules/products/dtos/ICategoriesDTO";
+import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
 
 @injectable()
 class NestCategoriesUseCase {
