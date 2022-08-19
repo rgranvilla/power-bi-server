@@ -7,6 +7,9 @@
     "rootDir": "./",
     "baseUrl": "src/",
     "paths": {
+      "@config/*": [
+        "config/*"
+      ],
       "@modules/*": [
         "modules/*"
       ],

@@ -1,11 +1,7 @@
 import { hash } from "bcrypt";
 import { getRepository, Repository } from "typeorm";
 
-import {
-  ICreateEmployeesDTO,
-  IFindByIdDTO,
-  IFindEmployeesDTO,
-} from "@modules/accounts/dtos/IEmployeesDTO";
+import { ICreateEmployeeDTO } from "@modules/accounts/dtos/ICreateEmployeeDTO";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
 
 import { Employees } from "../entities/Employees";
@@ -31,7 +27,7 @@ class EmployeesRepository implements IEmployeesRepository {
     gender,
     birthday,
     hire_date,
-  }: ICreateEmployeesDTO): Promise<void> {
+  }: ICreateEmployeeDTO): Promise<void> {
     const passwordHash = await hash(password, 8);
 
     const employees = this.repository.create({
@@ -53,19 +49,20 @@ class EmployeesRepository implements IEmployeesRepository {
     await this.repository.save(employees);
   }
 
-  async findById({ id }: IFindByIdDTO): Promise<Employees> {
+  async findById(id: string): Promise<Employees> {
     const employee = await this.repository.findOne(id);
 
     return employee;
   }
 
-  async findByEmployees({
-    username,
-    email,
-  }: IFindEmployeesDTO): Promise<Employees> {
-    const employee = await this.repository.findOne({
-      where: [{ username }, { email }],
-    });
+  async findByUsername(username: string): Promise<Employees> {
+    const employee = await this.repository.findOne({ username });
+
+    return employee;
+  }
+
+  async findByEmail(email: string): Promise<Employees> {
+    const employee = await this.repository.findOne({ email });
 
     return employee;
   }

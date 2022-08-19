@@ -72,12 +72,6 @@ class CategoriesRepository implements ICategoriesRepository {
     return parentCategory;
   }
 
-  async getParentId(parentCategory: Category): Promise<string> {
-    const id = await this.repository.getId(parentCategory);
-
-    return id;
-  }
-
   async getCategory({
     title,
     parent_title,

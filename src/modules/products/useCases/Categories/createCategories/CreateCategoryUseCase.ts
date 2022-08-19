@@ -45,7 +45,9 @@ class CreateCategoryUseCase {
     });
 
     if (!parentCategory) {
-      throw new AppError("Parent category doesn't exists");
+      throw new AppError(
+        "Can't create a new category because parent category doesn't exists!"
+      );
     }
 
     const parent_id = parentCategory.id;

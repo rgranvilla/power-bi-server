@@ -30,8 +30,6 @@ interface ICategoriesRepository {
     parent_level,
   }: IGetParentCategoryDTO): Promise<Category>;
 
-  getParentId(parentCategory: Category): Promise<string>;
-
   getCategory({
     title,
     parent_title,

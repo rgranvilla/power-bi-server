@@ -77,9 +77,7 @@ class ImportCategoriesUseCase {
         parent_level,
       });
 
-      const parent_id = await this.categoriesRepository.getParentId(
-        parentCategory
-      );
+      const parent_id = parentCategory.id;
 
       const categoryAlreadyExists =
         await this.categoriesRepository.checkCategoryExists({

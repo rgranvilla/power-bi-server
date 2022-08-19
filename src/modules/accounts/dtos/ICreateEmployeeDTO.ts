@@ -1,4 +1,4 @@
-interface ICreateEmployeesDTO {
+interface ICreateEmployeeDTO {
   id?: string;
   first_name: string;
   last_name: string;
@@ -14,12 +14,4 @@ interface ICreateEmployeesDTO {
   hire_date: Date;
 }
 
-interface IFindByIdDTO {
-  id: string;
-}
-interface IFindEmployeesDTO {
-  username?: string;
-  email?: string;
-}
-
-export { ICreateEmployeesDTO, IFindEmployeesDTO, IFindByIdDTO };
+export { ICreateEmployeeDTO };

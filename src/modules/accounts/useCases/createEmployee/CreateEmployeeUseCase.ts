@@ -18,7 +18,7 @@ interface IRequest {
 }
 
 @injectable()
-class CreateEmployeesUseCase {
+class CreateEmployeeUseCase {
   constructor(
     @inject("EmployeesRepository")
     private employeesRepository: IEmployeesRepository
@@ -37,14 +37,25 @@ class CreateEmployeesUseCase {
     birthday,
     hire_date,
   }: IRequest): Promise<void> {
-    const employeesAlreadyExists =
-      await this.employeesRepository.findByEmployees({
-        username,
-        email,
-      });
+    const employeeUsernameExists =
+      await this.employeesRepository.findByUsername(username);
 
-    if (employeesAlreadyExists) {
+    const employeeEmailExists = await this.employeesRepository.findByEmail(
+      email
+    );
+
+    const employeeAlreadyExists = employeeUsernameExists && employeeEmailExists;
+
+    if (employeeAlreadyExists) {
       throw new AppError("Employee already exists!");
+    }
+
+    if (employeeUsernameExists) {
+      throw new AppError("Employee username already exists!");
+    }
+
+    if (employeeEmailExists) {
+      throw new AppError("Employee email already exists!");
     }
 
     await this.employeesRepository.create({
@@ -63,4 +74,4 @@ class CreateEmployeesUseCase {
   }
 }
 
-export { CreateEmployeesUseCase };
+export { CreateEmployeeUseCase };

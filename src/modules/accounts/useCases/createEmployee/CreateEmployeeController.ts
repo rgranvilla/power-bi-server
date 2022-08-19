@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { CreateEmployeesUseCase } from "./CreateEmployeesUseCase";
+import { CreateEmployeeUseCase } from "./CreateEmployeeUseCase";
 
-class CreateEmployeesController {
+class CreateEmployeeController {
   async handle(request: Request, response: Response): Promise<Response> {
     const {
       first_name,
@@ -19,7 +19,7 @@ class CreateEmployeesController {
       hire_date,
     } = request.body;
 
-    const createEmployeesUseCase = container.resolve(CreateEmployeesUseCase);
+    const createEmployeesUseCase = container.resolve(CreateEmployeeUseCase);
 
     await createEmployeesUseCase.execute({
       first_name,
@@ -39,4 +39,4 @@ class CreateEmployeesController {
   }
 }
 
-export { CreateEmployeesController };
+export { CreateEmployeeController };
