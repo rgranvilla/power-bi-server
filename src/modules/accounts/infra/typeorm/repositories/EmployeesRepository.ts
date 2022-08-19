@@ -3,7 +3,7 @@ import { getRepository, Repository } from "typeorm";
 
 import {
   ICreateEmployeesDTO,
-  IFindById,
+  IFindByIdDTO,
   IFindEmployeesDTO,
 } from "@modules/accounts/dtos/ICreateEmployeesDTO";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
@@ -53,7 +53,7 @@ class EmployeesRepository implements IEmployeesRepository {
     await this.repository.save(employees);
   }
 
-  async findById({ id }: IFindById): Promise<Employees> {
+  async findById({ id }: IFindByIdDTO): Promise<Employees> {
     const employee = await this.repository.findOne(id);
 
     return employee;
