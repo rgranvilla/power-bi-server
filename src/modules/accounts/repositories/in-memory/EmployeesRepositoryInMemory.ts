@@ -21,7 +21,7 @@ class EmployeesRepositoryInMemory implements IEmployeesRepository {
     gender,
     birthday,
     hire_date,
-  }: ICreateEmployeeDTO): Promise<void> {
+  }: ICreateEmployeeDTO): Promise<Employees> {
     const employee = new Employees();
 
     const passwordHash = await hash(password, 8);
@@ -42,6 +42,8 @@ class EmployeesRepositoryInMemory implements IEmployeesRepository {
     });
 
     this.employees.push(employee);
+
+    return employee;
   }
 
   async findById(id: string): Promise<Employees> {

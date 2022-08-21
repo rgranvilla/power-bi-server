@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
+import { Employees } from "@modules/accounts/infra/typeorm/entities/Employees";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
 import { AppError } from "@shared/errors/AppErrors";
 
@@ -36,7 +37,7 @@ class CreateEmployeeUseCase {
     gender,
     birthday,
     hire_date,
-  }: IRequest): Promise<void> {
+  }: IRequest): Promise<Employees> {
     const employeeUsernameExists =
       await this.employeesRepository.findByUsername(username);
 
@@ -58,7 +59,7 @@ class CreateEmployeeUseCase {
       throw new AppError("Employee email already exists!");
     }
 
-    await this.employeesRepository.create({
+    const employee = await this.employeesRepository.create({
       first_name,
       last_name,
       position,
@@ -71,6 +72,8 @@ class CreateEmployeeUseCase {
       birthday,
       hire_date,
     });
+
+    return employee;
   }
 }
 

@@ -35,6 +35,6 @@ describe("Create Employee Controller", () => {
       .send(employee)
       .set({ Authorization: `Bearer ${token}` });
 
-    expect(response.body.message).toBe("Employee created");
+    expect(response.body).toHaveProperty("id");
   });
 });

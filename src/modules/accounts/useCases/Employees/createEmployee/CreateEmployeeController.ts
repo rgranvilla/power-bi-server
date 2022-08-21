@@ -21,7 +21,7 @@ class CreateEmployeeController {
 
     const createEmployeesUseCase = container.resolve(CreateEmployeeUseCase);
 
-    await createEmployeesUseCase.execute({
+    const employee = await createEmployeesUseCase.execute({
       first_name,
       last_name,
       position,
@@ -35,7 +35,7 @@ class CreateEmployeeController {
       hire_date,
     });
 
-    return response.status(201).json({ message: "Employee created" });
+    return response.status(201).json({ ...employee });
   }
 }
 

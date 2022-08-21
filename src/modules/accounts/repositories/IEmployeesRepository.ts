@@ -16,7 +16,7 @@ interface IEmployeesRepository {
     gender,
     birthday,
     hire_date,
-  }: ICreateEmployeeDTO): Promise<void>;
+  }: ICreateEmployeeDTO): Promise<Employees>;
   findById(id: string): Promise<Employees>;
   findByUsername(username: string): Promise<Employees>;
   findByEmail(email: string): Promise<Employees>;

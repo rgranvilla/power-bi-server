@@ -27,7 +27,7 @@ class EmployeesRepository implements IEmployeesRepository {
     gender,
     birthday,
     hire_date,
-  }: ICreateEmployeeDTO): Promise<void> {
+  }: ICreateEmployeeDTO): Promise<Employees> {
     const passwordHash = await hash(password, 8);
 
     const employees = this.repository.create({
@@ -46,7 +46,9 @@ class EmployeesRepository implements IEmployeesRepository {
       hire_date,
     });
 
-    await this.repository.save(employees);
+    const employee = await this.repository.save(employees);
+
+    return employee;
   }
 
   async findById(id: string): Promise<Employees> {
