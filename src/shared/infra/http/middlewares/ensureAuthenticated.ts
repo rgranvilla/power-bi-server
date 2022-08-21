@@ -1,7 +1,7 @@
-import auth from "config/auth";
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
+import auth from "@config/auth";
 import { EmployeesRepository } from "@modules/accounts/infra/typeorm/repositories/EmployeesRepository";
 import { AppError } from "@shared/errors/AppErrors";
 
@@ -27,7 +27,7 @@ export async function ensureAuthenticated(
 
     const employeesRepository = new EmployeesRepository();
 
-    const employee = employeesRepository.findById({ id: employee_id });
+    const employee = employeesRepository.findById(employee_id);
 
     if (!employee) {
       throw new AppError("Employee does not exists!");

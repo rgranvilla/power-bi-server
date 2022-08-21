@@ -77,6 +77,8 @@ class ImportCategoriesUseCase {
         parent_level,
       });
 
+      if (!parentCategory) throw await this.createCategory(categories);
+
       const parent_id = parentCategory.id;
 
       const categoryAlreadyExists =
@@ -97,7 +99,7 @@ class ImportCategoriesUseCase {
         });
       }
 
-      this.createCategory(categories);
+      await this.createCategory(categories);
     }
   }
 

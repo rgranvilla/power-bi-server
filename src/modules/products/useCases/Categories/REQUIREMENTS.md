@@ -28,16 +28,16 @@ Obs: the "user" term are used to represent both employee and customer.
 ## Import Categories
 
 ### **FR** => Functional requirements
-[] - Should be able to import csv categories files.
-[] - Should be able to create an imported category.
+[x] - Should be able to import a csv file of categories and save them into the app.
 
 ### **FNR** => Functional not requirements
-[] - Use multer to upload files
+[x] - Use multer to upload files
 
 ### **BR** => Business Rules
-[] - Must be an employee authenticated to import categories.
-[] - Shouldn't be able to create an imported category previews existent.
-[] - Shouldn't be able to create an imported category without existent parent category.
+[x] - Shouldn't be able to import categories if don't be an employee authenticated.
+[x] - Shouldn't be able to import an invalid file.
+[x] - Shouldn't be able to import categories with non-existent parent.
+
 
 --------------------------------------------------------------------------------
 

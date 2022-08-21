@@ -3,6 +3,7 @@ import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 import auth from "@config/auth";
+import { Employees } from "@modules/accounts/infra/typeorm/entities/Employees";
 import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
 import { AppError } from "@shared/errors/AppErrors";
 
@@ -33,13 +34,16 @@ class AuthenticateEmployeeUseCase {
   ) {}
 
   async execute({ username, email, password }: IRequest): Promise<IResponse> {
+    let employee: Employees;
+
     const employeeUsername = await this.employeesRepository.findByUsername(
       username
     );
 
     const employeeEmail = await this.employeesRepository.findByEmail(email);
 
-    const employee = employeeUsername || employeeEmail;
+    if (employeeUsername) employee = employeeUsername;
+    if (employeeEmail) employee = employeeEmail;
 
     if (!employee) {
       throw new AppError("Username, email or password incorrect!");
@@ -47,9 +51,8 @@ class AuthenticateEmployeeUseCase {
 
     const passwordMatch = await compare(password, employee.password);
 
-    if (!passwordMatch) {
+    if (!passwordMatch)
       throw new AppError("Username, email or password incorrect!");
-    }
 
     const token = sign({}, auth.secret_token, {
       subject: employee.id,

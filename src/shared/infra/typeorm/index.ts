@@ -8,7 +8,7 @@ export default async (host = "database"): Promise<Connection> => {
       host: process.env.NODE_ENV === "test" ? "localhost" : host,
       database:
         process.env.NODE_ENV === "test"
-          ? "divino_test"
+          ? "dbdivino_test"
           : defaultOptions.database,
     })
   );

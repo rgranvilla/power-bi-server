@@ -6,6 +6,9 @@ const authenticateEmployeeRoutes = Router();
 
 const authenticateEmployeeController = new AuthenticateEmployeeController();
 
-authenticateEmployeeRoutes.post("/", authenticateEmployeeController.handle);
+authenticateEmployeeRoutes.post(
+  "/sessions",
+  authenticateEmployeeController.handle
+);
 
 export { authenticateEmployeeRoutes };

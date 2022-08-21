@@ -1,7 +1,7 @@
-import uploadConfig from "config/upload";
 import { Router } from "express";
 import multer from "multer";
 
+import uploadConfig from "@config/upload";
 import { CreateEmployeeController } from "@modules/accounts/useCases/createEmployee/CreateEmployeeController";
 import { UpdateEmployeeAvatarController } from "@modules/accounts/useCases/updateEmployeeAvatar/UpdateEmployeeAvatarController";
 

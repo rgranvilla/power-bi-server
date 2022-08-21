@@ -16,9 +16,7 @@ class UpdateEmployeeAvatarUseCase {
   ) {}
 
   async execute({ employee_id, avatar_file }: IRequest): Promise<void> {
-    const employee = await this.employeesRepository.findById({
-      id: employee_id,
-    });
+    const employee = await this.employeesRepository.findById(employee_id);
 
     if (employee.avatar) {
       await deleteFile(`./tmp/avatar/${employee.avatar}`);

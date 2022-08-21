@@ -7,7 +7,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "seed:root_category": "ts-node-dev src/shared/infra/typeorm/seed/rootCategory.ts",
-    "test": "jest"
+    "test": "NODE_ENV=test jest --detectOpenHandles --runInBand"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -26,6 +26,7 @@
     "node": "^16.13.2",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
+    "supertest": "^6.2.4",
     "swagger-ui-express": "^4.5.0",
     "tsyringe": "^4.7.0",
     "typeorm": "0.2.45",
@@ -36,6 +37,7 @@
     "@types/jest": "^28.1.7",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/multer": "^1.4.7",
+    "@types/supertest": "^2.0.12",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/parser": "^5.32.0",
     "eslint": "^7.32.0",
