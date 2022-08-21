@@ -9,7 +9,7 @@ async function seedAdminEmployee(connection: Connection): Promise<void> {
   await connection.query(
     `
       INSERT INTO employees(id, first_name, last_name, position, username, avatar, access_level, email, password, leader_username, gender, birthday, hire_date, created_at, updated_at )
-      values('${id}', 'John', 'Doe', 'TI Admin', 'John', '', 0, 'johndoe@mail.com', '${password}', 'Boss', 'male', 'now()', 'now()', 'now()', 'now()')
+      values('${id}', 'Admin', 'LastName', 'TI Admin', 'Admin', '', 0, 'admin@mail.com', '${password}', 'Boss', 'male', 'now()', 'now()', 'now()', 'now()')
       `
   );
 }

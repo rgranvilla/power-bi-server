@@ -35,7 +35,7 @@ class CreateEmployeeController {
       hire_date,
     });
 
-    return response.status(201).json({ message: "Employees created" });
+    return response.status(201).json({ message: "Employee created" });
   }
 }
 

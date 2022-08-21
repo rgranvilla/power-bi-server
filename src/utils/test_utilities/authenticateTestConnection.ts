@@ -16,7 +16,7 @@ async function authenticateTestConnection(): Promise<string> {
   await seedRootCategory(connection);
 
   response = await request(app).post("/sessions").send({
-    username: "John",
+    username: "Admin",
     password: "admin",
   });
 
