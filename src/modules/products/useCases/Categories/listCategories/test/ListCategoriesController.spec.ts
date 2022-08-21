@@ -6,7 +6,7 @@ import { createCategoriesTestConnection } from "@utils/test_utilities/createCate
 
 describe("List all categories", () => {
   beforeAll(async () => {
-    // create list of categories content 9 insertions
+    // create list of categories content 11 insertions
     await createCategoriesTestConnection();
   });
 
@@ -17,6 +17,6 @@ describe("List all categories", () => {
   it("Should be able list all categories", async () => {
     const response = await request(app).get("/categories/");
 
-    expect(response.body.length).toBe(9);
+    expect(response.body.length).toBe(11);
   });
 });

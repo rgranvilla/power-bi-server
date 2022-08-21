@@ -49,6 +49,16 @@ async function seedCategories(connection: Connection): Promise<void> {
       values('4186e0ed-4d5e-41dc-8dbc-45aff6bef1c2', 'Category 1_1_1', 'a889493f-65a9-4dee-9657-daffb3c1043d', 'Category 1_1', 3, 'null', 'category_1_1_1', 'now()', 'now()')
     `
   );
+  await connection.query(
+    `INSERT INTO CATEGORIES(id, title, parent_id, parent_title, category_level, icon_url, slug, created_at, updated_at )
+      values('492a8c98-1529-4822-8d82-34561773fed6', 'Category 1_3', 'ab95b3ea-6d9e-4bfe-8af1-4dca668fecec', 'Category 1', 2, 'null', 'category_1_3', 'now()', 'now()')
+    `
+  );
+  await connection.query(
+    `INSERT INTO CATEGORIES(id, title, parent_id, parent_title, category_level, icon_url, slug, created_at, updated_at )
+      values('b39d9188-05d2-4eec-bd7d-54e7dad85efe', 'Category 4', '623f42c2-ace8-4db1-8b9c-606dd54cf569', 'Root', 1, 'null', 'category_4', 'now()', 'now()')
+    `
+  );
 }
 
 export { seedRootCategory, seedCategories };
