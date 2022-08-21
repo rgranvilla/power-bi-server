@@ -67,6 +67,12 @@ describe("Group by category level", () => {
     await createCategoryUseCase.execute(category6);
   });
 
+  afterEach(() => {
+    createCategoryUseCase = null;
+    categoriesRepositoryInMemory = null;
+    groupByCategoryLevelUseCase = null;
+  });
+
   it("Should be able to sort categories by level category", async () => {
     const response = await groupByCategoryLevelUseCase.execute();
 

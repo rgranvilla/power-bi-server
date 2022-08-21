@@ -56,7 +56,7 @@ Obs: the "user" term are used to represent both employee and customer.
 ## Sort Categories
 
 ### **FR** => Functional requirements
-[] - Should be able to sort categories by category level
+[x] - Should be able to sort categories by category level
 
 ### **BR** => Business Rules
-[] - Shouldn't need be an user authenticated to list nested categories.
+[x] - Shouldn't need be an user authenticated to list nested categories.
