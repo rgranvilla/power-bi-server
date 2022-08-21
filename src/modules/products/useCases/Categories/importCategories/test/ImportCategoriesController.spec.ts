@@ -1,10 +1,8 @@
 import request from "supertest";
 
 import { app } from "@shared/infra/http/app";
-import {
-  authenticateConnection,
-  closeConnection,
-} from "@utils/test/authenticateConnection";
+import { authenticateTestConnection } from "@utils/test_utilities/authenticateTestConnection";
+import { closeConnection } from "@utils/test_utilities/connectionTest";
 
 const valid_csv_file_test = "./assets/valid_csv_file_test.csv";
 const invalid_csv_file_test = "./assets/invalid_csv_file_test.csv";
@@ -15,7 +13,7 @@ let authorizationEmployeeToken: string;
 
 describe("Import categories from csv file", () => {
   beforeAll(async () => {
-    authorizationEmployeeToken = await authenticateConnection();
+    authorizationEmployeeToken = await authenticateTestConnection();
   });
 
   afterAll(async () => {
