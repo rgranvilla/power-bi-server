@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
 import { User } from "@modules/accounts/infra/typeorm/entities/User";
@@ -38,10 +39,12 @@ class CreateUserUseCase {
       throw new AppError("Username or email already exists!", 500);
     }
 
+    const passwordHash = await hash(password, 8);
+
     const user = await this.usersRepository.create({
       username,
       email,
-      password,
+      password: passwordHash,
     });
 
     return user;

@@ -28,7 +28,6 @@ class SendForgotPasswordMailUseCase {
       __dirname,
       "..",
       "..",
-      "..",
       "views",
       "emails",
       "forgotPassword.hbs"

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { AppError } from "../../../../../shared/errors/AppErrors";
+import { AppError } from "@shared/errors/AppErrors";
+
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 class AuthenticateUserController {

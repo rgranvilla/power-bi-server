@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SES } from "aws-sdk";
 import fs from "fs";
 import handlebars from "handlebars";

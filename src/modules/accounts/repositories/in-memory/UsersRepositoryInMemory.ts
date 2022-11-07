@@ -1,6 +1,5 @@
 import { hash } from "bcrypt";
 
-import { AppError } from "../../../../shared/errors/AppErrors";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { User } from "../../infra/typeorm/entities/User";
 import { IUsersRepository } from "../IUsersRepository";

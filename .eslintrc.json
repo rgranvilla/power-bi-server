@@ -5,7 +5,7 @@
     "jest": true
   },
   "extends": [
-    "airbnb-base",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "plugin:prettier/recommended"
@@ -19,7 +19,6 @@
   "rules": {
     "camelcase": "off",
     "prettier/prettier": "error",
-    "import/no-unresolved": "error",
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -38,13 +37,6 @@
     "no-useless-constructor": "off",
     "no-empty-function": "off",
     "lines-between-class-members": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never"
-      }
-    ],
     "import-helpers/order-imports": [
       "warn",
       {
@@ -52,10 +44,6 @@
         "groups": ["module", "/^@/", ["parent", "sibling", "index"]],
         "alphabetize": { "order": "asc", "ignoreCase": true }
       }
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      { "devDependencies": ["**/*.spec.js"] }
     ]
   },
   "settings": {
@@ -67,3 +55,7 @@
     }
   }
 }
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
