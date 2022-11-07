@@ -2,17 +2,17 @@ import { container } from "tsyringe";
 
 import "@shared/container/providers";
 
-import { EmployeesRepository } from "@modules/accounts/infra/typeorm/repositories/EmployeesRepository";
-import { IEmployeesRepository } from "@modules/accounts/repositories/IEmployeesRepository";
-import { CategoriesRepository } from "@modules/products/infra/typeorm/repositories/CategoriesRepository";
-import { ICategoriesRepository } from "@modules/products/repositories/ICategoriesRepository";
+import { UsersRepository } from "@modules/accounts/infra/typeorm/repositories/UsersRepository";
+import { UsersTokensRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
+import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 
-container.registerSingleton<ICategoriesRepository>(
-  "CategoriesRepository",
-  CategoriesRepository
+container.registerSingleton<IUsersRepository>(
+  "UsersRepository",
+  UsersRepository
 );
 
-container.registerSingleton<IEmployeesRepository>(
-  "EmployeesRepository",
-  EmployeesRepository
+container.registerSingleton<IUsersTokensRepository>(
+  "UsersTokensRepository",
+  UsersTokensRepository
 );

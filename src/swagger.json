@@ -1,366 +1,226 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Devtrail E-Commerce API Documentation",
-    "description": "This is an API E-commerce",
+    "title": "Power Business Inteligence API Documentation",
+    "description": "Power Business Inteligence API Documentation",
     "version": "1.0.0",
     "contact": {
-      "email": "developerstrail@gmail.com"
+      "email": "rgranvilla@gmail.com"
     }
   },
   "paths": {
-    "/categories": {
-      "description": "Create a category.",
+    "/users": {
+      "description": "Create an user.",
       "post": {
-        "tags": [
-          "Categories"
-        ],
-        "summary": "Create a category",
-        "description": "Create a new category.",
+        "tags": ["Users"],
+        "summary": "Create an user",
+        "description": "Create a new user.",
+        "security": [{ "bearerAuth": [] }],
+        "required": true,
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions/CreateCategories"
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "username": "JohnDoe",
+                  "email": "johndoe@mail.com",
+                  "password": "123456"
+                }
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Category created"
-          },
-          "500": {
-            "description": "Category already exists!"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Categories"
-        ],
-        "summary": "List all categories",
-        "description": "List all categories.",
-        "responses": {
-          "200": {
-            "description": "Success",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/ListCategories"
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "id": "2cb40451-4ac3-4505-827a-b4143549c0c2",
+                    "username": "JohnDoe",
+                    "email": "johndoe@mail.com"
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/categories/import": {
-      "description": "Import categories from csv file.",
-      "post": {
-        "tags": [
-          "Categories"
-        ],
-        "summary": "Import categories from csv file",
-        "description": "Create new categories from csv file import. (OBS: DON'T TRY IMPORT FILE BY HERE, TRY IT ON POSTMAN OR INSOMNIA, BROWSER ARE FREEZING)",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "message": "Token missing"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "message": "Username or email already exists!"
                   }
                 }
               }
             }
           }
+        }
+      }
+    },
+    "/sessions": {
+      "description": "Authenticate user",
+      "post": {
+        "tags": ["Authenticate"],
+        "summary": "Authenticate an user.",
+        "description": "Authenticate an user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@mail.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
         },
         "responses": {
           "201": {
-            "description": "Categories created"
-          }
-        }
-      }
-    },
-    "/categories/group/by_category_level": {
-      "description": "Group categories by category level.",
-      "get": {
-        "tags": [
-          "Categories"
-        ],
-        "summary": "Group categories by category level",
-        "description": "Group categories by category level.",
-        "responses": {
-          "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/GroupCategoriesByIndentation"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/categories/nest": {
-      "description": "Nest categories",
-      "get": {
-        "tags": [
-          "Categories"
-        ],
-        "summary": "Nest all categories by parent/children categories",
-        "description": "Nest all categories by parent/children categories.",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/definitions/NestCategories"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "CreateCategories": {
-      "types": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "parent_title": {
-          "type": "string"
-        },
-        "category_level": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "icon_url": {
-          "type": "string"
-        }
-      },
-      "example": {
-        "title": "Category title sample",
-        "parent_title": "Category parent_title sample",
-        "category_level": 0,
-        "icon_url": "Category icon url"
-      }
-    },
-    "ListCategories": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string"
-          },
-          "parent_id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "parent_title": {
-            "type": "string"
-          },
-          "category_level": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "icon_url": {
-            "type": "string",
-            "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      }
-    },
-    "GroupCategoriesByIndentation": {
-      "type": "array",
-      "items": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "title": {
-              "type": "string"
-            },
-            "parent_id": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "parent_title": {
-              "type": "string"
-            },
-            "category_level": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "icon_url": {
-              "type": "string",
-              "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
-            },
-            "slug": {
-              "type": "string"
-            },
-            "created_at": {
-              "type": "string",
-              "format": "date"
-            },
-            "updated_at": {
-              "type": "string",
-              "format": "date"
-            }
-          }
-        }
-      }
-    },
-    "NestCategories": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string"
-          },
-          "parent_id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "parent_title": {
-            "type": "string"
-          },
-          "category_level": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "icon_url": {
-            "type": "string",
-            "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "children": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "parent_id": {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                "parent_title": {
-                  "type": "string"
-                },
-                "category_level": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "icon_url": {
-                  "type": "string",
-                  "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "created_at": {
-                  "type": "string",
-                  "format": "date"
-                },
-                "updated_at": {
-                  "type": "string",
-                  "format": "date"
-                },
-                "children": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "parent_id": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "parent_title": {
-                        "type": "string"
-                      },
-                      "category_level": {
-                        "type": "integer",
-                        "format": "int32"
-                      },
-                      "icon_url": {
-                        "type": "string",
-                        "example": "https//db_images_divinodesign.com.br/categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/icon"
-                      },
-                      "slug": {
-                        "type": "string"
-                      },
-                      "created_at": {
-                        "type": "string",
-                        "format": "date"
-                      },
-                      "updated_at": {
-                        "type": "string",
-                        "format": "date"
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
                       }
+                    }
+                  },
+                  "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Njc3NTQyNTQsImV4cCI6MTY2Nzg0MDY1NCwic3ViIjoiNWVjM2M4YjAtMDc3My00ZWZiLTk2MDYtZjhjMmMxNGRkNDRiIn0.bS6pb621ULvUM0sPx2SZSZSSEDYnnSaPENPJONDIAgQ",
+                    "user": {
+                      "username": "johndoe",
+                      "email": "johndoe@mail.com"
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "message": "Email or password incorrect!"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "message": "Email and password fields are required!"
+                  }
+                }
+              }
+            }
           }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

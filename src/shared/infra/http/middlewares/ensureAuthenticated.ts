@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import auth from "@config/auth";
-import { EmployeesRepository } from "@modules/accounts/infra/typeorm/repositories/EmployeesRepository";
 import { AppError } from "@shared/errors/AppErrors";
 
 interface IPayload {
@@ -23,18 +22,10 @@ export async function ensureAuthenticated(
   const [, token] = authHeader.split(" ");
 
   try {
-    const { sub: employee_id } = verify(token, auth.secret_token) as IPayload;
-
-    const employeesRepository = new EmployeesRepository();
-
-    const employee = employeesRepository.findById(employee_id);
-
-    if (!employee) {
-      throw new AppError("Employee does not exists!");
-    }
+    const { sub: user_id } = verify(token, auth.secret_token) as IPayload;
 
     request.user = {
-      id: employee_id,
+      id: user_id,
     };
 
     next();
