@@ -17,14 +17,13 @@ class CreateUserController {
         password,
       });
 
-      const res: Omit<
-        User,
-        "password" | "created_at" | "updated_at" | "avatar"
-      > = {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      };
+      const res: Omit<User, "password" | "created_at" | "isAdmin" | "avatar"> =
+        {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          avatar_url: user.avatar_url,
+        };
 
       return response.status(201).json({ ...res });
     } catch (err) {

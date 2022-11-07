@@ -8,8 +8,8 @@ async function seedAdminUser(connection: Connection): Promise<void> {
   // Initialization user admin
   await connection.query(
     `
-      INSERT INTO users(id, username, avatar, email, password, created_at, updated_at )
-      values('${id}', 'Admin', '', 'admin@mail.com', '${password}', 'now()', 'now()')
+      INSERT INTO users(id, username, avatar, email, password, "isAdmin", created_at)
+      values('${id}', 'Admin', '', 'admin@mail.com', '${password}', true, 'now()')
       `
   );
 }
