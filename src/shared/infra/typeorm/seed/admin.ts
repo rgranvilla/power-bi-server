@@ -1,7 +1,7 @@
 import { hash } from "bcrypt";
 import { v4 as uuidV4 } from "uuid";
 
-import createConnection from "../index";
+import { createConnection } from "../index";
 
 async function create() {
   const connection = await createConnection("localhost");
@@ -15,7 +15,7 @@ async function create() {
     `
   );
 
-  await connection.close();
+  await connection.destroy();
 }
 
 create().then(() => console.log("User admin created!"));

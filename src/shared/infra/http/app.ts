@@ -14,7 +14,6 @@ import { router } from "./routes";
 
 import "@shared/container";
 
-createConnection("localhost");
 const app = express();
 
 app.use(express.json());
