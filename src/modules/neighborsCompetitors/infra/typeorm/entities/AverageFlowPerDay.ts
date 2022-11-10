@@ -1,22 +1,19 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
-@Entity("neighborhoods")
-class Neighborhood {
+@Entity("competitors_infos_average_flow_per_day")
+class AverageFlowPerDay {
   @PrimaryColumn()
   id: string;
 
   @Column()
-  neighborhood: string;
+  competitor_info_average_flow_id: string;
 
   @Column()
-  city: string;
+  weekday: string;
 
   @Column()
-  state: string;
-
-  @Column()
-  area: number;
+  dayPeriod: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -25,11 +22,7 @@ class Neighborhood {
     if (!this.id) {
       this.id = uuidV4();
     }
-
-    if (!this.area) {
-      this.area = 0;
-    }
   }
 }
 
-export { Neighborhood };
+export { AverageFlowPerDay };

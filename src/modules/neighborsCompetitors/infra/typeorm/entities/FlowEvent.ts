@@ -1,22 +1,16 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
-@Entity("neighborhoods")
-class Neighborhood {
+@Entity("flow_events")
+class FlowEvent {
   @PrimaryColumn()
   id: string;
 
   @Column()
-  neighborhood: string;
+  competitor_id: string;
 
   @Column()
-  city: string;
-
-  @Column()
-  state: string;
-
-  @Column()
-  area: number;
+  event_date: Date;
 
   @CreateDateColumn()
   created_at: Date;
@@ -25,11 +19,7 @@ class Neighborhood {
     if (!this.id) {
       this.id = uuidV4();
     }
-
-    if (!this.area) {
-      this.area = 0;
-    }
   }
 }
 
-export { Neighborhood };
+export { FlowEvent };

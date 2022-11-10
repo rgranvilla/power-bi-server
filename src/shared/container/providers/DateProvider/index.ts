@@ -7,3 +7,5 @@ container.registerSingleton<IDateProvider>(
   "DayjsDateProvider",
   DayjsDateProvider
 );
+
+export type { IDateProvider };

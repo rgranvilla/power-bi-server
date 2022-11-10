@@ -1,13 +1,13 @@
 import { ICreateNeighborhoodDTO } from "@modules/neighborhoods/dtos/ICreateNeighborhoodDTO";
 import { Neighborhood } from "@modules/neighborhoods/infra/typeorm/entities/Neighborhood";
 
-import { INeighborhoodRepository } from "../INeighborhoodRepository";
+import { INeighborhoodsRepository } from "../INeighborhoodsRepository";
 
-class NeighborhoodRepositoryInMemory implements INeighborhoodRepository {
+class NeighborhoodsRepositoryInMemory implements INeighborhoodsRepository {
   neighborhoods: Neighborhood[] = [];
 
   async create({
-    code,
+    id,
     neighborhood,
     city,
     state,
@@ -16,7 +16,7 @@ class NeighborhoodRepositoryInMemory implements INeighborhoodRepository {
     const neighbor = new Neighborhood();
 
     Object.assign(neighbor, {
-      code,
+      id,
       neighborhood,
       city,
       state,
@@ -68,4 +68,4 @@ class NeighborhoodRepositoryInMemory implements INeighborhoodRepository {
   }
 }
 
-export { NeighborhoodRepositoryInMemory };
+export { NeighborhoodsRepositoryInMemory };

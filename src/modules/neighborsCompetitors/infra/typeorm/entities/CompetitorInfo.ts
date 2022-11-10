@@ -1,22 +1,31 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
-@Entity("neighborhoods")
-class Neighborhood {
+@Entity("competitors_infos")
+class CompetitorInfo {
   @PrimaryColumn()
   id: string;
+
+  @Column()
+  competitor_id: string;
+
+  @Column()
+  competitor_name: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  price_range: string;
 
   @Column()
   neighborhood: string;
 
   @Column()
-  city: string;
+  population: string;
 
   @Column()
-  state: string;
-
-  @Column()
-  area: number;
+  demographic_density: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -25,11 +34,7 @@ class Neighborhood {
     if (!this.id) {
       this.id = uuidV4();
     }
-
-    if (!this.area) {
-      this.area = 0;
-    }
   }
 }
 
-export { Neighborhood };
+export { CompetitorInfo };

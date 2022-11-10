@@ -12,10 +12,9 @@ type FindNeighborhoodsByCityType = {
   state: string;
 };
 
-interface INeighborhoodRepository {
+interface INeighborhoodsRepository {
   create({
     id,
-    code,
     neighborhood,
     city,
     state,
@@ -32,6 +31,12 @@ interface INeighborhoodRepository {
     city,
     state,
   }: FindNeighborhoodsByCityType): Promise<Neighborhood[]>;
+  getAllNeighborhoods(): Promise<Neighborhood[]>;
+  neighborAlreadyExist({
+    neighborhood,
+    city,
+    state,
+  }: FindNeighborhoodType): Promise<boolean>;
 }
 
-export type { INeighborhoodRepository };
+export type { INeighborhoodsRepository };

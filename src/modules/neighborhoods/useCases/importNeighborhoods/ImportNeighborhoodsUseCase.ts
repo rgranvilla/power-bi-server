@@ -2,10 +2,10 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { inject, injectable } from "tsyringe";
 
-import { INeighborhoodRepository } from "@modules/neighborhoods/repositories/INeighborhoodRepository";
+import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 
 interface IImportNeighborhood {
-  code: string;
+  id: string;
   neighborhood: string;
   city: string;
   state: string;
@@ -13,10 +13,10 @@ interface IImportNeighborhood {
 }
 
 @injectable()
-class ImportNeighborhoodUseCase {
+class ImportNeighborhoodsUseCase {
   constructor(
-    @inject("NeighborhoodRepository")
-    private neighborhoodRepository: INeighborhoodRepository
+    @inject("NeighborhoodsRepository")
+    private neighborhoodsRepository: INeighborhoodsRepository
   ) {}
 
   loadNeighborhoods(file: Express.Multer.File): Promise<IImportNeighborhood[]> {
@@ -25,6 +25,7 @@ class ImportNeighborhoodUseCase {
       const neighborhoods: IImportNeighborhood[] = [];
 
       const parseFile = parse({
+        from_line: 2,
         delimiter: ",",
       });
 
@@ -32,16 +33,15 @@ class ImportNeighborhoodUseCase {
 
       parseFile
         .on("data", async (line) => {
-          const [code, neighborhood, city, state, area] = line;
+          const [id, neighborhood, city, state, area] = line;
 
-          if (code !== "codigo")
-            neighborhoods.push({
-              code,
-              neighborhood,
-              city,
-              state,
-              area,
-            });
+          neighborhoods.push({
+            id,
+            neighborhood,
+            city,
+            state,
+            area,
+          });
         })
         .on("end", () => {
           fs.promises.unlink(file.path);
@@ -54,38 +54,24 @@ class ImportNeighborhoodUseCase {
     });
   }
 
-  orderNeighborhoods(
-    neighborhoods: IImportNeighborhood[]
-  ): IImportNeighborhood[] {
-    const orderedNeighborhoods = neighborhoods.sort((a, b) => {
-      if (a.city === b.city) {
-        return a.neighborhood < b.neighborhood ? -1 : 1;
-      } else {
-        return a.city < b.city ? -1 : 1;
-      }
-    });
-
-    return orderedNeighborhoods;
-  }
-
   async createNeighborhood(
     neighborhoods: IImportNeighborhood[]
   ): Promise<void> {
     if (neighborhoods.length > 0) {
       const neighbor = neighborhoods.shift();
 
-      const { code, neighborhood, city, state, area } = neighbor;
+      const { id, neighborhood, city, state, area } = neighbor;
 
       const neighborhoodAlreadyExists =
-        await this.neighborhoodRepository.findNeighborhood({
+        await this.neighborhoodsRepository.findNeighborhood({
           neighborhood,
           city,
           state,
         });
 
       if (!neighborhoodAlreadyExists) {
-        await this.neighborhoodRepository.create({
-          code,
+        await this.neighborhoodsRepository.create({
+          id,
           neighborhood,
           city,
           state,
@@ -100,12 +86,8 @@ class ImportNeighborhoodUseCase {
   async execute(file: Express.Multer.File): Promise<void> {
     const neighborhoods = await this.loadNeighborhoods(file);
 
-    const orderedNeighborhoods = this.orderNeighborhoods(neighborhoods);
-
-    console.log(orderedNeighborhoods);
-
-    await this.createNeighborhood(orderedNeighborhoods);
+    await this.createNeighborhood(neighborhoods);
   }
 }
 
-export { ImportNeighborhoodUseCase };
+export { ImportNeighborhoodsUseCase };

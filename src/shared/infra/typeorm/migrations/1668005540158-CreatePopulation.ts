@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateNeighborhoods1667854119167 implements MigrationInterface {
+export class CreatePopulation1668005540158 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "neighborhoods",
+        name: "population",
         columns: [
           {
             name: "id",
@@ -12,19 +12,11 @@ export class CreateNeighborhoods1667854119167 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: "neighborhood",
+            name: "neighborhood_id",
             type: "varchar",
           },
           {
-            name: "city",
-            type: "varchar",
-          },
-          {
-            name: "state",
-            type: "varchar",
-          },
-          {
-            name: "area",
+            name: "population",
             type: "numeric",
           },
           {
@@ -33,11 +25,21 @@ export class CreateNeighborhoods1667854119167 implements MigrationInterface {
             default: "now()",
           },
         ],
+        foreignKeys: [
+          {
+            name: "FKNeighborhoodPopulation",
+            referencedTableName: "neighborhoods",
+            referencedColumnNames: ["id"],
+            columnNames: ["neighborhood_id"],
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+          },
+        ],
       })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("neighborhoods");
+    await queryRunner.dropTable("population");
   }
 }
