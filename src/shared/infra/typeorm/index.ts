@@ -32,8 +32,8 @@ const dataSource = new DataSource({
   ],
 });
 
-export function createConnection(host = "database"): Promise<DataSource> {
-  return dataSource.setOptions({ host }).initialize();
+export function createConnection(): Promise<DataSource> {
+  return dataSource.initialize();
 }
 
 export default dataSource;
