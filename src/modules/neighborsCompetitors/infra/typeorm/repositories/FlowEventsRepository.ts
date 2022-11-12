@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 
-import { ICreateFlowEventDTO } from "@modules/neighborsCompetitors/dtos/ICreateFlowEventDTO";
+import { IFlowEventDTO } from "@modules/neighborsCompetitors/dtos/IFlowEventDTO";
 import { IFlowEventsRepository } from "@modules/neighborsCompetitors/repositories/IFlowEventsRepository";
 import dataSource from "@shared/infra/typeorm";
 
@@ -15,20 +15,25 @@ class FlowEventsRepository implements IFlowEventsRepository {
 
   async create({
     id,
-    competitor_id,
     event_date,
-  }: ICreateFlowEventDTO): Promise<FlowEvent> {
+    weekday,
+    day_period,
+    competitor_info,
+  }: IFlowEventDTO): Promise<FlowEvent> {
     const flowEventAlreadyExist = await this.repository.findOneBy({
       id,
-      competitor_id,
       event_date,
     });
+
+    console.log(competitor_info);
 
     if (!flowEventAlreadyExist) {
       const flowEvent = this.repository.create({
         id,
-        competitor_id,
         event_date,
+        weekday,
+        day_period,
+        competitor_info,
       });
 
       const res = await this.repository.save(flowEvent);

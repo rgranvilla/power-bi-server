@@ -3,6 +3,7 @@ import multer from "multer";
 
 import { ImportNeighborhoodsController } from "@modules/neighborhoods/useCases/importNeighborhoods/ImportNeighborhoodsController";
 import { ImportNeighborPopulationsController } from "@modules/neighborhoods/useCases/importNeighborPopulations/importNeighborPopulationsController";
+import { ShowNeighborhoodsController } from "@modules/neighborhoods/useCases/showNeighborhoods/ShowNeighborhoodsController";
 
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
@@ -15,6 +16,7 @@ const upload = multer({
 const importNeighborhoodsController = new ImportNeighborhoodsController();
 const importNeighborPopulationsController =
   new ImportNeighborPopulationsController();
+const showCompetitorsController = new ShowNeighborhoodsController();
 
 neighborhoodsRoute.post(
   "/import/neighborhood",
@@ -28,6 +30,12 @@ neighborhoodsRoute.post(
   ensureAuthenticated,
   upload.single("file"),
   importNeighborPopulationsController.handle
+);
+
+neighborhoodsRoute.get(
+  "/",
+  ensureAuthenticated,
+  showCompetitorsController.handle
 );
 
 export { neighborhoodsRoute };

@@ -4,6 +4,7 @@ import { ICreatePopulationDTO } from "@modules/neighborhoods/dtos/ICreatePopulat
 import { IPopulationRepository } from "@modules/neighborhoods/repositories/IPopulationRepository";
 import dataSource from "@shared/infra/typeorm";
 
+import { Neighborhood } from "../entities/Neighborhood";
 import { Population } from "../entities/Population";
 
 class PopulationRepository implements IPopulationRepository {
@@ -14,39 +15,29 @@ class PopulationRepository implements IPopulationRepository {
   }
 
   async create({
-    id,
-    neighborhood_id,
     population,
+    neighborhood,
   }: ICreatePopulationDTO): Promise<Population> {
     const neighborPopulation = this.repository.create({
-      id,
-      neighborhood_id,
       population,
+      neighborhood,
     });
 
-    const alreadyExist = await this.repository.findOneBy({
-      neighborhood_id,
-    });
+    await this.repository
+      .createQueryBuilder()
+      .relation(Neighborhood, "neighbor_population")
+      .of(neighborhood)
+      .set(neighborPopulation.id);
 
-    if (!alreadyExist) {
-      const res = await this.repository.save(neighborPopulation);
+    const res = await this.repository.save(neighborPopulation);
 
-      return res;
-    }
+    return res;
   }
 
-  async findById(id: string): Promise<Population> {
-    const population = await this.repository.findOneBy({ id });
+  async getPopulations(): Promise<Population[]> {
+    const allPopulation = await this.repository.find();
 
-    return population;
-  }
-
-  async findPopulationByNeighborhoodId(neighborId: string): Promise<number> {
-    const { population } = await this.repository.findOneBy({
-      neighborhood_id: neighborId,
-    });
-
-    return population;
+    return allPopulation;
   }
 }
 

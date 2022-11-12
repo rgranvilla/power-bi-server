@@ -3,6 +3,7 @@ import multer from "multer";
 
 import { ImportFlowEventsController } from "@modules/neighborsCompetitors/useCases/importFlowEvents/ImportFlowEventsController";
 import { ImportNeighborsCompetitorsController } from "@modules/neighborsCompetitors/useCases/importNeighborsCompetitors/ImportNeighborsCompetitorsController";
+import { ShowCompetitorsController } from "@modules/neighborsCompetitors/useCases/showCompetitors/ShowCompetitorsController";
 
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
@@ -15,6 +16,7 @@ const upload = multer({
 const importNeighborsCompetitorsController =
   new ImportNeighborsCompetitorsController();
 const importFlowEventsController = new ImportFlowEventsController();
+const showCompetitorsController = new ShowCompetitorsController();
 
 competitorsRoute.post(
   "/import",
@@ -28,6 +30,12 @@ competitorsRoute.post(
   ensureAuthenticated,
   upload.single("file"),
   importFlowEventsController.handle
+);
+
+competitorsRoute.get(
+  "/",
+  ensureAuthenticated,
+  showCompetitorsController.handle
 );
 
 export { competitorsRoute };

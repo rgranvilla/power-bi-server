@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import { Repository } from "typeorm";
 
-import { ICreateNeighborhoodDTO } from "@modules/neighborhoods/dtos/ICreateNeighborhoodDTO";
+import { INeighborhoodDTO } from "@modules/neighborhoods/dtos/INeighborhoodDTO";
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 import dataSource from "@shared/infra/typeorm";
 
@@ -17,13 +17,15 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
   async create({
     id,
     neighborhood,
+    neighborhood_id,
     city,
     state,
     area,
-  }: ICreateNeighborhoodDTO): Promise<Neighborhood> {
+  }: INeighborhoodDTO): Promise<Neighborhood> {
     const neighbor = this.repository.create({
       id,
       neighborhood,
+      neighborhood_id,
       city,
       state,
       area,
@@ -42,20 +44,10 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
     }
   }
 
-  async findById(id: string): Promise<Neighborhood> {
-    const neighbor = await this.repository.findOneBy({ id });
+  async findByNeighborhoodId(neighborhood_id: string): Promise<Neighborhood> {
+    const neighbor = await this.repository.findOneBy({ neighborhood_id });
 
     return neighbor;
-  }
-
-  async findByNeighborhood(neighborhood: string): Promise<Neighborhood[]> {
-    const neighbors = await this.repository.find({
-      where: {
-        neighborhood,
-      },
-    });
-
-    return neighbors;
   }
 
   async findNeighborhood({
@@ -74,23 +66,6 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
     });
 
     return neighbor;
-  }
-
-  async findNeighborhoodsByCity({
-    city,
-    state,
-  }: {
-    city: string;
-    state: string;
-  }): Promise<Neighborhood[]> {
-    const neighbors = await this.repository.find({
-      where: {
-        city,
-        state,
-      },
-    });
-
-    return neighbors;
   }
 
   async getAllNeighborhoods(): Promise<Neighborhood[]> {

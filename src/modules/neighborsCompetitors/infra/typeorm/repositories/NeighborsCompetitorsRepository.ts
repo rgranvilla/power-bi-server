@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 
-import { ICreateNeighborCompetitorDTO } from "@modules/neighborsCompetitors/dtos/ICreateNeighborCompetitorDTO";
+import { INeighborCompetitorDTO } from "@modules/neighborsCompetitors/dtos/INeighborCompetitorDTO";
 import { INeighborsCompetitorsRepository } from "@modules/neighborsCompetitors/repositories/INeighborsCompetitorsRepository";
 import dataSource from "@shared/infra/typeorm";
 
@@ -24,7 +24,8 @@ class NeighborsCompetitorsRepository
     city,
     state,
     neighborhood_id,
-  }: ICreateNeighborCompetitorDTO): Promise<NeighborCompetitor> {
+    neighborhood,
+  }: INeighborCompetitorDTO): Promise<NeighborCompetitor> {
     const competitor = this.repository.create({
       id,
       competitor_name,
@@ -34,6 +35,7 @@ class NeighborsCompetitorsRepository
       city,
       state,
       neighborhood_id,
+      neighborhood,
     });
 
     const res = await this.repository.save(competitor);

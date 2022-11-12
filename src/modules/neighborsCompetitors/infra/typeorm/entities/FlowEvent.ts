@@ -1,5 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
 import { v4 as uuidV4 } from "uuid";
+
+import { NeighborCompetitor } from "./NeighborCompetitor";
 
 @Entity("flow_events")
 class FlowEvent {
@@ -7,10 +15,16 @@ class FlowEvent {
   id: string;
 
   @Column()
-  competitor_id: string;
+  event_date: Date;
 
   @Column()
-  event_date: Date;
+  weekday: string;
+
+  @Column()
+  day_period: string;
+
+  @ManyToOne(() => NeighborCompetitor, (competitor) => competitor.flow_events)
+  competitor_info: NeighborCompetitor;
 
   @CreateDateColumn()
   created_at: Date;

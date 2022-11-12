@@ -1,25 +1,28 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
-import { v4 as uuidV4 } from "uuid";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
-@Entity("population")
+import { Neighborhood } from "./Neighborhood";
+
+@Entity("populations")
 class Population {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
-  neighborhood_id: string;
+  @OneToOne(() => Neighborhood, (neighbor) => neighbor.neighbor_population)
+  @JoinColumn()
+  neighborhood: Neighborhood;
 
   @Column()
-  population: number;
+  population: string;
 
   @CreateDateColumn()
   created_at: Date;
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuidV4();
-    }
-  }
 }
 
 export { Population };

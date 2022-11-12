@@ -1,7 +1,9 @@
+import { Neighborhood } from "../infra/typeorm/entities/Neighborhood";
+
 interface ICreatePopulationDTO {
   id?: string;
-  neighborhood_id: string;
-  population: number;
+  neighborhood: Neighborhood;
+  population: string;
 }
 
 export type { ICreatePopulationDTO };

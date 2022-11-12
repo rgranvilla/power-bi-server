@@ -10,14 +10,8 @@ import { NeighborhoodsRepository } from "@modules/neighborhoods/infra/typeorm/re
 import { PopulationRepository } from "@modules/neighborhoods/infra/typeorm/repositories/PopulationRepository";
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 import { IPopulationRepository } from "@modules/neighborhoods/repositories/IPopulationRepository";
-import { AverageFlowPerDayRepository } from "@modules/neighborsCompetitors/infra/typeorm/repositories/AverageFlowPerDayRepository";
-import { AverageFlowRepository } from "@modules/neighborsCompetitors/infra/typeorm/repositories/AverageFlowRepository";
-import { CompetitorsInfosRepository } from "@modules/neighborsCompetitors/infra/typeorm/repositories/CompetitorsInfosRepository";
 import { FlowEventsRepository } from "@modules/neighborsCompetitors/infra/typeorm/repositories/FlowEventsRepository";
 import { NeighborsCompetitorsRepository } from "@modules/neighborsCompetitors/infra/typeorm/repositories/NeighborsCompetitorsRepository";
-import { IAverageFlowPerDayRepository } from "@modules/neighborsCompetitors/repositories/IAverageFlowPerDayRepository";
-import { IAverageFlowRepository } from "@modules/neighborsCompetitors/repositories/IAverageFlowRepository";
-import { ICompetitorsInfosRepository } from "@modules/neighborsCompetitors/repositories/ICompetitorsInfosRepository";
 import { IFlowEventsRepository } from "@modules/neighborsCompetitors/repositories/IFlowEventsRepository";
 import { INeighborsCompetitorsRepository } from "@modules/neighborsCompetitors/repositories/INeighborsCompetitorsRepository";
 
@@ -49,19 +43,4 @@ container.registerSingleton<IPopulationRepository>(
 container.registerSingleton<IFlowEventsRepository>(
   "FlowEventsRepository",
   FlowEventsRepository
-);
-
-container.registerSingleton<ICompetitorsInfosRepository>(
-  "CompetitorsInfosRepository",
-  CompetitorsInfosRepository
-);
-
-container.registerSingleton<IAverageFlowRepository>(
-  "AverageFlowRepository",
-  AverageFlowRepository
-);
-
-container.registerSingleton<IAverageFlowPerDayRepository>(
-  "AverageFlowPerDayRepository",
-  AverageFlowPerDayRepository
 );

@@ -1,4 +1,4 @@
-import { ICreateNeighborhoodDTO } from "../dtos/ICreateNeighborhoodDTO";
+import { INeighborhoodDTO } from "../dtos/INeighborhoodDTO";
 import { Neighborhood } from "../infra/typeorm/entities/Neighborhood";
 
 type FindNeighborhoodType = {
@@ -7,30 +7,21 @@ type FindNeighborhoodType = {
   state: string;
 };
 
-type FindNeighborhoodsByCityType = {
-  city: string;
-  state: string;
-};
-
 interface INeighborhoodsRepository {
   create({
     id,
+    neighborhood_id,
     neighborhood,
     city,
     state,
     area,
-  }: ICreateNeighborhoodDTO): Promise<Neighborhood>;
-  findById(id: string): Promise<Neighborhood>;
-  findByNeighborhood(neighborhood: string): Promise<Neighborhood[]>;
+  }: INeighborhoodDTO): Promise<Neighborhood>;
+  findByNeighborhoodId(neighborhood_id: string): Promise<Neighborhood>;
   findNeighborhood({
     neighborhood,
     city,
     state,
   }: FindNeighborhoodType): Promise<Neighborhood>;
-  findNeighborhoodsByCity({
-    city,
-    state,
-  }: FindNeighborhoodsByCityType): Promise<Neighborhood[]>;
   getAllNeighborhoods(): Promise<Neighborhood[]>;
   neighborAlreadyExist({
     neighborhood,

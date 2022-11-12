@@ -1,10 +1,29 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
-import { v4 as uuidV4 } from "uuid";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+
+import { NeighborCompetitor } from "@modules/neighborsCompetitors/infra/typeorm/entities/NeighborCompetitor";
+
+import { Population } from "./Population";
 
 @Entity("neighborhoods")
 class Neighborhood {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @Column()
+  neighborhood_id: string;
+
+  @OneToOne(() => Population, (population) => population.neighborhood, {
+    eager: true,
+    cascade: true,
+  })
+  neighbor_population: Population;
 
   @Column()
   neighborhood: string;
@@ -16,20 +35,13 @@ class Neighborhood {
   state: string;
 
   @Column()
-  area: number;
+  area: string;
+
+  @OneToMany(() => NeighborCompetitor, (competitor) => competitor.neighborhood)
+  neighbor_competitors: NeighborCompetitor[];
 
   @CreateDateColumn()
   created_at: Date;
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuidV4();
-    }
-
-    if (!this.area) {
-      this.area = 0;
-    }
-  }
 }
 
 export { Neighborhood };

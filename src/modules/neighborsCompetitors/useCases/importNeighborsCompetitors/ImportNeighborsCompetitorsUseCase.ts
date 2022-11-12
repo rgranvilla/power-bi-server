@@ -2,24 +2,15 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { inject, injectable } from "tsyringe";
 
-import { Neighborhood } from "@modules/neighborhoods/infra/typeorm/entities/Neighborhood";
+import { INeighborhoodDTO } from "@modules/neighborhoods/dtos/INeighborhoodDTO";
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
+import { INeighborCompetitorDTO } from "@modules/neighborsCompetitors/dtos/INeighborCompetitorDTO";
 import { INeighborsCompetitorsRepository } from "@modules/neighborsCompetitors/repositories/INeighborsCompetitorsRepository";
-
-interface IImportCompetitor {
-  id: string;
-  competitor_name: string;
-  category: string;
-  price_range: string;
-  address: string;
-  city: string;
-  state: string;
-  neighborhood_id: string;
-}
 
 @injectable()
 class ImportNeighborsCompetitorsUseCase {
-  private neighborshoods: Neighborhood[] = [];
+  private neighborshoods: INeighborhoodDTO[] = [];
+  private neighborCompetitor: INeighborCompetitorDTO[] = [];
 
   constructor(
     @inject("NeighborsCompetitorsRepository")
@@ -28,10 +19,12 @@ class ImportNeighborsCompetitorsUseCase {
     private neighborhoodsRepository: INeighborhoodsRepository
   ) {}
 
-  loadCompetitors(file: Express.Multer.File): Promise<IImportCompetitor[]> {
+  loadCompetitors(
+    file: Express.Multer.File
+  ): Promise<INeighborCompetitorDTO[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
-      const competitors: IImportCompetitor[] = [];
+      const competitors: INeighborCompetitorDTO[] = [];
 
       const parseFile = parse({
         from_line: 2,
@@ -54,16 +47,25 @@ class ImportNeighborsCompetitorsUseCase {
             neighborhood_id,
           ] = line;
 
-          competitors.push({
-            id,
-            competitor_name,
-            category,
-            price_range,
-            address,
-            city,
-            state,
-            neighborhood_id,
-          });
+          const hasNeighborhood = this.neighborshoods.find(
+            (item) => item.neighborhood_id === neighborhood_id
+          );
+
+          const alreadyExist = this.neighborCompetitor.find(
+            (item) => item.id === id
+          );
+
+          if (hasNeighborhood && !alreadyExist)
+            competitors.push({
+              id,
+              competitor_name,
+              category,
+              price_range,
+              address,
+              city,
+              state,
+              neighborhood_id,
+            });
         })
         .on("end", () => {
           fs.promises.unlink(file.path);
@@ -76,61 +78,36 @@ class ImportNeighborsCompetitorsUseCase {
     });
   }
 
-  async loadNeighborshoods(): Promise<void> {
-    const res = await this.neighborhoodsRepository.getAllNeighborhoods();
-
-    this.neighborshoods.push(...res);
-  }
-
-  isValidCompetitorDataToCreateCompetitor(competitor: IImportCompetitor) {
-    const hasNeighborId = !!competitor?.neighborhood_id;
-    const hasCity = !!competitor?.city;
-    const hasState = !!competitor?.state;
-    const hasCompetitorName = !!competitor.competitor_name;
-    const hasCategory = !!competitor.category;
-    const hasAddress = !!competitor.address;
-    const hasPriceRange = !!competitor.price_range;
-
-    const isValid =
-      hasNeighborId &&
-      hasCity &&
-      hasState &&
-      hasCompetitorName &&
-      hasCategory &&
-      hasAddress &&
-      hasPriceRange;
-
-    return isValid;
-  }
-
-  async _createCompetitor(competitor: IImportCompetitor): Promise<void> {
-    await this.competitorsRepository.create({
-      ...competitor,
-    });
+  async loadRepositories(): Promise<void> {
+    const neighbors = await this.neighborhoodsRepository.getAllNeighborhoods();
+    const competitors = await this.competitorsRepository.getAllCompetitors();
+    this.neighborshoods.push(...neighbors);
+    this.neighborCompetitor.push(...competitors);
   }
 
   async _handleCreateCompetitor(
-    competitors: IImportCompetitor[]
+    competitors: INeighborCompetitorDTO[]
   ): Promise<void> {
     if (competitors.length === 0) return;
 
     const competitor = competitors.shift();
 
-    const isValidCompetitorData =
-      this.isValidCompetitorDataToCreateCompetitor(competitor);
+    const { neighborhood_id } = competitor;
 
-    const hasNeighborhoodId = this.neighborshoods.some(
-      (element) => element.id === competitor.neighborhood_id
-    );
+    const neighborhood =
+      await this.neighborhoodsRepository.findByNeighborhoodId(neighborhood_id);
 
-    if (isValidCompetitorData && hasNeighborhoodId)
-      await this._createCompetitor(competitor);
+    if (neighborhood)
+      await this.competitorsRepository.create({
+        ...competitor,
+        neighborhood,
+      });
 
     return await this._handleCreateCompetitor(competitors);
   }
 
   async execute(file: Express.Multer.File): Promise<void> {
-    await this.loadNeighborshoods();
+    await this.loadRepositories();
     const competitors = await this.loadCompetitors(file);
 
     await this._handleCreateCompetitor(competitors);

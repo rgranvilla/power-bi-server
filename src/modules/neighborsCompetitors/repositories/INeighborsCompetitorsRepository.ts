@@ -1,4 +1,4 @@
-import { ICreateNeighborCompetitorDTO } from "../dtos/ICreateNeighborCompetitorDTO";
+import { INeighborCompetitorDTO } from "../dtos/INeighborCompetitorDTO";
 import { NeighborCompetitor } from "../infra/typeorm/entities/NeighborCompetitor";
 
 interface INeighborsCompetitorsRepository {
@@ -11,7 +11,7 @@ interface INeighborsCompetitorsRepository {
     city,
     state,
     neighborhood_id,
-  }: ICreateNeighborCompetitorDTO): Promise<NeighborCompetitor>;
+  }: INeighborCompetitorDTO): Promise<NeighborCompetitor>;
   findById(id: string): Promise<NeighborCompetitor>;
   findByCompetitor(competitor_name: string): Promise<NeighborCompetitor>;
   findByCategory(category: string): Promise<NeighborCompetitor[]>;

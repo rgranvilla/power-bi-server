@@ -4,11 +4,10 @@ import { inject, injectable } from "tsyringe";
 
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 import { IPopulationRepository } from "@modules/neighborhoods/repositories/IPopulationRepository";
-import { IStorageProvider } from "@shared/container/providers/StorageProvider/IStorageProvider";
 
 interface IImportPopulation {
   codigo: string;
-  populacao: number;
+  populacao: string;
 }
 
 @injectable()
@@ -17,9 +16,7 @@ class ImportNeighborPopulationsUseCase {
     @inject("PopulationRepository")
     private populationRepository: IPopulationRepository,
     @inject("NeighborhoodsRepository")
-    private neighborhoodsRepository: INeighborhoodsRepository,
-    @inject("StorageProvider")
-    private storageProvider: IStorageProvider
+    private neighborhoodsRepository: INeighborhoodsRepository
   ) {}
 
   loadPopulations(file: Express.Multer.File): Promise<IImportPopulation[]> {
@@ -38,21 +35,16 @@ class ImportNeighborPopulationsUseCase {
     const { codigo: neighborhood_id, populacao: population } =
       neighborPopulation;
 
-    const neighborhood = await this.neighborhoodsRepository.findById(
-      neighborhood_id
-    );
+    const neighborhood =
+      await this.neighborhoodsRepository.findByNeighborhoodId(neighborhood_id);
     const neighborIdExist = !!neighborhood?.id;
 
     if (!neighborIdExist)
       return await this.createNeighborPopulation(populations);
 
-    const populationAlreadyExist = await this.populationRepository.findById(
-      neighborhood_id
-    );
-
-    if (!populationAlreadyExist && !!population) {
+    if (population) {
       await this.populationRepository.create({
-        neighborhood_id,
+        neighborhood,
         population,
       });
     }
