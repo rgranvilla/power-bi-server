@@ -6,10 +6,10 @@ services:
     container_name: dbpowerbi
     restart: always
     ports:
-      - 5432:5432
+      - 65431:5432
     environment:
       - POSTGRES_USER=powerbi
-      - POSTGRES_PASSWORD=123456
+      - POSTGRES_PASSWORD=GevEU!04Yl3#
       - POSTGRES_DB=dbpowerbi
     volumes:
       - pgdata:/data/postgres

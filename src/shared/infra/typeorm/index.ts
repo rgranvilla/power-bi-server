@@ -13,9 +13,9 @@ import { CreateTables1668275234491 } from "./migrations/1668275234491-CreateTabl
 
 const dataSource = new DataSource({
   type: "postgres",
-  port: 5432,
+  port: 65431,
   username: "powerbi",
-  password: "123456",
+  password: "GevEU!04Yl3#",
   database: process.env.NODE_ENV === "test" ? "dbpowerbi_test" : "dbpowerbi",
   entities: [
     User,
