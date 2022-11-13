@@ -17,6 +17,11 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.json({ limit: "10mb" }));
+app.use(
+  express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
+);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/avatar", express.static(`${upload.tmpFolder}/avatar`));
