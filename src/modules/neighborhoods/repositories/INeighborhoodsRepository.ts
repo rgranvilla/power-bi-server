@@ -2,32 +2,46 @@ import { INeighborhoodDTO } from "../dtos/INeighborhoodDTO";
 import { Neighborhood } from "../infra/typeorm/entities/Neighborhood";
 
 type FindNeighborhoodType = {
-  neighborhood: string;
+  name: string;
   city: string;
   state: string;
 };
 
+interface IPaginateNeighbors {
+  page: number;
+  take: number;
+  orderDirection: "ASC" | "DESC";
+}
+
 interface INeighborhoodsRepository {
   create({
-    id,
     neighborhood_id,
-    neighborhood,
+    name,
     city,
     state,
     area,
   }: INeighborhoodDTO): Promise<Neighborhood>;
   findByNeighborhoodId(neighborhood_id: string): Promise<Neighborhood>;
   findNeighborhood({
-    neighborhood,
+    name,
     city,
     state,
   }: FindNeighborhoodType): Promise<Neighborhood>;
   getAllNeighborhoods(): Promise<Neighborhood[]>;
   neighborAlreadyExist({
-    neighborhood,
+    name,
     city,
     state,
   }: FindNeighborhoodType): Promise<boolean>;
+  getPaginateNeighborhoods({
+    page,
+    take,
+    orderDirection,
+  }: IPaginateNeighbors): Promise<Neighborhood[]>;
 }
 
-export type { INeighborhoodsRepository };
+export type {
+  INeighborhoodsRepository,
+  FindNeighborhoodType,
+  IPaginateNeighbors,
+};

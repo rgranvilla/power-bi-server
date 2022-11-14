@@ -1,70 +1,88 @@
-import { ICreateNeighborhoodDTO } from "@modules/neighborhoods/dtos/ICreateNeighborhoodDTO";
+import { INeighborhoodDTO } from "@modules/neighborhoods/dtos/INeighborhoodDTO";
 import { Neighborhood } from "@modules/neighborhoods/infra/typeorm/entities/Neighborhood";
 
-import { INeighborhoodsRepository } from "../INeighborhoodsRepository";
+import {
+  FindNeighborhoodType,
+  INeighborhoodsRepository,
+} from "../INeighborhoodsRepository";
 
 class NeighborhoodsRepositoryInMemory implements INeighborhoodsRepository {
   neighborhoods: Neighborhood[] = [];
 
   async create({
-    id,
-    neighborhood,
+    neighborhood_id,
+    name,
     city,
     state,
     area,
-  }: ICreateNeighborhoodDTO): Promise<Neighborhood> {
+  }: INeighborhoodDTO): Promise<Neighborhood> {
     const neighbor = new Neighborhood();
 
     Object.assign(neighbor, {
-      id,
-      neighborhood,
+      neighborhood_id,
+      name,
       city,
       state,
       area,
     });
 
-    this.neighborhoods.push(neighbor);
+    const alreadyExist = await this.neighborAlreadyExist({
+      name,
+      city,
+      state,
+    });
+
+    if (!alreadyExist) {
+      this.neighborhoods.push(neighbor);
+
+      return neighbor;
+    }
+  }
+
+  async findByNeighborhoodId(neighborhood_id: string): Promise<Neighborhood> {
+    const neighbor = this.neighborhoods.find(
+      (entitie) => entitie.neighborhood_id === neighborhood_id
+    );
 
     return neighbor;
   }
 
-  async findById(id: string): Promise<Neighborhood> {
-    return this.neighborhoods.find((neighbor) => neighbor.id === id);
-  }
-
-  async findByNeighborhood(neighborhood: string): Promise<Neighborhood[]> {
-    return this.neighborhoods.filter(
-      (entitie) => entitie.neighborhood === neighborhood
-    );
-  }
-
   async findNeighborhood({
-    neighborhood,
+    name,
     city,
     state,
   }: {
-    neighborhood: string;
+    name: string;
     city: string;
     state: string;
   }): Promise<Neighborhood> {
-    return this.neighborhoods.find(
+    const neighbor = this.neighborhoods.find(
       (entitie) =>
-        entitie.neighborhood === neighborhood &&
+        entitie.name === name &&
         entitie.city === city &&
         entitie.state === state
     );
+
+    return neighbor;
   }
 
-  async findNeighborhoodsByCity({
+  async getAllNeighborhoods(): Promise<Neighborhood[]> {
+    return this.neighborhoods;
+  }
+
+  async neighborAlreadyExist({
+    name,
     city,
     state,
-  }: {
-    city: string;
-    state: string;
-  }): Promise<Neighborhood[]> {
-    return this.neighborhoods.filter(
-      (entitie) => entitie.city === city && entitie.state === state
+  }: FindNeighborhoodType): Promise<boolean> {
+    const alreadyExist = !!this.neighborhoods.find(
+      (entitie) =>
+        entitie.name === name &&
+        entitie.city === city &&
+        entitie.state === state
     );
+
+    return alreadyExist;
   }
 }
 

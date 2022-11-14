@@ -1,8 +1,8 @@
 import { hash } from "bcrypt";
-import { Connection } from "typeorm";
+import { DataSource } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
-async function seedAdminUser(connection: Connection): Promise<void> {
+async function seedAdminUser(connection: DataSource): Promise<void> {
   const id = uuidV4();
   const password = await hash("admin", 8);
   // Initialization user admin

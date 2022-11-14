@@ -37,15 +37,16 @@ class ImportNeighborPopulationsUseCase {
 
     const neighborhood =
       await this.neighborhoodsRepository.findByNeighborhoodId(neighborhood_id);
-    const neighborIdExist = !!neighborhood?.id;
+    const neighborIdExist = !!neighborhood?.neighborhood_id;
 
     if (!neighborIdExist)
       return await this.createNeighborPopulation(populations);
 
     if (population) {
       await this.populationRepository.create({
-        neighborhood,
+        neighborhood_id,
         population,
+        neighborhood,
       });
     }
 

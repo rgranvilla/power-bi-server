@@ -1,9 +1,10 @@
 import { Router } from "express";
 import multer from "multer";
 
-import { ImportFlowEventsController } from "@modules/neighborsCompetitors/useCases/importFlowEvents/ImportFlowEventsController";
-import { ImportNeighborsCompetitorsController } from "@modules/neighborsCompetitors/useCases/importNeighborsCompetitors/ImportNeighborsCompetitorsController";
-import { ShowCompetitorsController } from "@modules/neighborsCompetitors/useCases/showCompetitors/ShowCompetitorsController";
+import { ImportCompetitorsController } from "@modules/competitors/useCases/importCompetitors/ImportCompetitorsController";
+import { ImportFlowEventsController } from "@modules/competitors/useCases/importFlowEvents/ImportFlowEventsController";
+import { ShowCompetitorInfoController } from "@modules/competitors/useCases/showCompetitorInfo/ShowCompetitorInfoController";
+import { ShowCompetitorsController } from "@modules/competitors/useCases/showCompetitors/ShowCompetitorsController";
 
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 
@@ -13,16 +14,16 @@ const upload = multer({
   dest: "./tmp",
 });
 
-const importNeighborsCompetitorsController =
-  new ImportNeighborsCompetitorsController();
+const importCompetitorsController = new ImportCompetitorsController();
 const importFlowEventsController = new ImportFlowEventsController();
 const showCompetitorsController = new ShowCompetitorsController();
+const showCompetitorInfoController = new ShowCompetitorInfoController();
 
 competitorsRoute.post(
   "/import",
   ensureAuthenticated,
   upload.single("file"),
-  importNeighborsCompetitorsController.handle
+  importCompetitorsController.handle
 );
 
 competitorsRoute.post(
@@ -36,6 +37,12 @@ competitorsRoute.get(
   "/",
   ensureAuthenticated,
   showCompetitorsController.handle
+);
+
+competitorsRoute.get(
+  "/competitor",
+  ensureAuthenticated,
+  showCompetitorInfoController.handle
 );
 
 export { competitorsRoute };

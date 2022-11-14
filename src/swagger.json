@@ -108,6 +108,147 @@
         }
       }
     },
+    "/users/profile": {
+      "description": "Show an user.",
+      "get": {
+        "tags": ["Users"],
+        "summary": "Show an user",
+        "description": "Show a new user.",
+        "security": [{ "bearerAuth": [] }],
+        "required": true,
+        "responses": {
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "avatar_url": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "id": "ab89a986-5d0a-4174-a0c0-6ac6c19c8fcf",
+                    "username": "admin",
+                    "email": "suporte@devtrails.com.br",
+                    "avatar": null,
+                    "avatar_url": "https://api-powerbi-rgranvilla.s3.sa-east-1.amazonaws.com/avatar/null"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Upload user image",
+        "description": "Upload .jpg/.png.jpeg image to be registered in a user.",
+        "operationId": "updateUserAvatar",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image successfully added."
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/password/forgot": {
+      "patch": {
+        "tags": ["Password Management"],
+        "summary": "Recover password",
+        "description": "Recover password, you will recived an email with a link to reset password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok."
+          }
+        }
+      }
+    },
+    "/password/reset?token={token}": {
+      "patch": {
+        "tags": ["Password Management"],
+        "summary": "Reset password",
+        "description": "Reset password",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Reset password token, you can get link with sended token in your email.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "745f39d5-92fc-4674-984b-14a51462c7ad"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok."
+          }
+        }
+      }
+    },
     "/sessions": {
       "description": "Authenticate user",
       "post": {
@@ -206,6 +347,893 @@
                   },
                   "example": {
                     "message": "Email and password fields are required!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/neighborhoods/import/neighborhood": {
+      "description": "Import neighborhood from csv file",
+      "post": {
+        "tags": ["Neighborhood"],
+        "summary": "Import neighborhood from csv file.",
+        "description": "Import neighborhood from csv file.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Neighborhoods created"
+          }
+        }
+      }
+    },
+    "/neighborhoods/import/population": {
+      "description": "Import population from json file",
+      "post": {
+        "tags": ["Neighborhood"],
+        "summary": "Import population from json file.",
+        "description": "Import population from json file.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Neighbors Populations created"
+          }
+        }
+      }
+    },
+    "/neighborhoods/": {
+      "description": "Show Neighborhoods",
+      "get": {
+        "tags": ["Neighborhood"],
+        "summary": "Show Neighborhoods.",
+        "description": "Show Neighborhoods.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "number"
+                  },
+                  "take": {
+                    "type": "number"
+                  },
+                  "orderDirection": {
+                    "type": "'ASC' | 'DESC'"
+                  }
+                },
+                "example": {
+                  "page": 2,
+                  "take": 12,
+                  "orderDirection": "ASC"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "neighborhood_id": {
+                      "type": "string"
+                    },
+                    "population_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "area": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "population_id": {
+                                "type": "string"
+                              },
+                              "neighborhood_id": {
+                                "type": "string"
+                              },
+                              "population": {
+                                "type": "string"
+                              },
+                              "demographic_density": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "neighborhood_id": "35095092",
+                      "population_id": "35095092",
+                      "name": "Aparecidinha",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "area": "16.5339",
+                      "created_at": "2022-11-14T21:06:56.017Z",
+                      "population": {
+                        "population_id": "35095092",
+                        "neighborhood_id": "35095092",
+                        "population": "62822",
+                        "demographic_density": "3800",
+                        "created_at": "2022-11-14T21:06:59.502Z"
+                      }
+                    },
+                    {
+                      "neighborhood_id": "35095093",
+                      "population_id": "35095093",
+                      "name": "Amarais",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "area": "10.8662",
+                      "created_at": "2022-11-14T21:06:55.997Z",
+                      "population": {
+                        "population_id": "35095093",
+                        "neighborhood_id": "35095093",
+                        "population": "35996",
+                        "demographic_density": "3313",
+                        "created_at": "2022-11-14T21:06:59.477Z"
+                      }
+                    },
+                    {
+                      "neighborhood_id": "35095067",
+                      "population_id": "35095067",
+                      "name": "Amoreiras",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "area": "10.0518",
+                      "created_at": "2022-11-14T21:06:55.710Z",
+                      "population": {
+                        "population_id": "35095067",
+                        "neighborhood_id": "35095067",
+                        "population": "60786",
+                        "demographic_density": "6047",
+                        "created_at": "2022-11-14T21:06:59.013Z"
+                      }
+                    },
+                    {
+                      "neighborhood_id": "35095092",
+                      "population_id": "35095092",
+                      "name": "Aparecidinha",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "area": "16.5339",
+                      "created_at": "2022-11-14T21:06:56.017Z",
+                      "population": {
+                        "population_id": "35095092",
+                        "neighborhood_id": "35095092",
+                        "population": "62822",
+                        "demographic_density": "3800",
+                        "created_at": "2022-11-14T21:06:59.502Z"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/neighborhoods/neighbor_name": {
+      "description": "Show Neighborhood",
+      "get": {
+        "tags": ["Neighborhood"],
+        "summary": "Show Neighborhood by name, city and state.",
+        "description": "Show Neighborhood by name, city and state.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Amoreiras",
+                  "city": "Campinas",
+                  "state": "SP"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "neighborhood_id": {
+                      "type": "string"
+                    },
+                    "population_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "area": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "population_id": {
+                                "type": "string"
+                              },
+                              "neighborhood_id": {
+                                "type": "string"
+                              },
+                              "population": {
+                                "type": "string"
+                              },
+                              "demographic_density": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "neighborhood_id": "35095067",
+                    "population_id": "35095067",
+                    "name": "Amoreiras",
+                    "city": "Campinas",
+                    "state": "SP",
+                    "area": "10.0518",
+                    "created_at": "2022-11-14T21:06:55.710Z",
+                    "population": {
+                      "population_id": "35095067",
+                      "neighborhood_id": "35095067",
+                      "population": "60786",
+                      "demographic_density": "6047",
+                      "created_at": "2022-11-14T21:06:59.013Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/competitors/import": {
+      "description": "Import competitor from csv file",
+      "post": {
+        "tags": ["Competitor"],
+        "summary": "Import competitor from csv file.",
+        "description": "Import competitor from csv file.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Competitors created"
+          }
+        }
+      }
+    },
+    "/competitors/import/flowevents": {
+      "description": "Import flow events from csv.gz file",
+      "post": {
+        "tags": ["Competitor"],
+        "summary": "Import flow events from csv.gz file.",
+        "description": "Import flow events from csv.gz file.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Neighbors Populations created"
+          }
+        }
+      }
+    },
+    "/competitors/": {
+      "description": "Show Competitors",
+      "get": {
+        "tags": ["Competitor"],
+        "summary": "Show Competitors.",
+        "description": "Show Competitors.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "number"
+                  },
+                  "take": {
+                    "type": "number"
+                  },
+                  "orderDirection": {
+                    "type": "'ASC' | 'DESC'"
+                  }
+                },
+                "example": {
+                  "page": 2,
+                  "take": 12,
+                  "orderDirection": "ASC"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "competitor_id": {
+                      "type": "string"
+                    },
+                    "neighborhood_id": {
+                      "type": "string"
+                    },
+                    "competitor_name": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "price_range": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "flow_events": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "flow_event_id": {
+                                "type": "string"
+                              },
+                              "competitor_id": {
+                                "type": "string"
+                              },
+                              "event_date": {
+                                "type": "string"
+                              },
+                              "weekday": {
+                                "type": "string"
+                              },
+                              "day_period": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "competitor_id": "1605669599718959",
+                      "neighborhood_id": "35095090",
+                      "competitor_name": "7opções Festas",
+                      "category": "Caterer, Wedding Planning Service, Performance & Event Venue",
+                      "address": "Rua Adolfina Dagnone, 80 - Chácara Recanto da Colina Verde, 13058833 Campinas",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "price_range": "4",
+                      "created_at": "2022-11-14T16:54:37.498Z",
+                      "flow_events": [
+                        {
+                          "flow_event_id": "X6FKiWR91KKwBA1R8yqn+6b+Cp6Fi6I6SuLM7Ouv798mHRgeSweal0qr+c4HDWQ9",
+                          "competitor_id": "1605669599718959",
+                          "event_date": "2017-07-01T20:07:36.675Z",
+                          "weekday": "6",
+                          "day_period": "night",
+                          "created_at": "2022-11-14T16:56:17.638Z"
+                        },
+                        {
+                          "flow_event_id": "85nDcxbJP7fYhWHE4zII/CTQrIKIA3+RuzPkxTfG4jquErQBrERMmiLm+3dNI4Xo",
+                          "competitor_id": "1605669599718959",
+                          "event_date": "2017-07-23T11:50:54.422Z",
+                          "weekday": "0",
+                          "day_period": "morning",
+                          "created_at": "2022-11-14T16:56:17.640Z"
+                        },
+                        {
+                          "flow_event_id": "Wwvz9Nua7dFjWpToAl7wQysaPljQMBeOM3usos2RvBV9SDfHA8sPjr64+wQrHByl",
+                          "competitor_id": "1605669599718959",
+                          "event_date": "2017-07-22T18:45:57.729Z",
+                          "weekday": "6",
+                          "day_period": "night",
+                          "created_at": "2022-11-14T16:56:17.644Z"
+                        }
+                      ]
+                    },
+                    {
+                      "competitor_id": "226152074079389",
+                      "neighborhood_id": "35095070",
+                      "competitor_name": "Abelha Gulosa The Mall",
+                      "category": "Bakery, Pizza Place",
+                      "address": "Av Guilherme Campos s/n - shopping the mall, 13087-757 Campinas",
+                      "city": "Campinas",
+                      "state": "SP",
+                      "price_range": "3",
+                      "created_at": "2022-11-14T16:54:40.067Z",
+                      "flow_events": [
+                        {
+                          "flow_event_id": "qDF1RZza000ffWntzPGZyXVw7BTjDxcWktOinnc6UDJmXJ9m+4L/eM0yDhfonjl8",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-04T15:14:24.286Z",
+                          "weekday": "2",
+                          "day_period": "afternoon",
+                          "created_at": "2022-11-14T16:56:40.107Z"
+                        },
+                        {
+                          "flow_event_id": "PQsJTUkIecIdsnCJR60JR5ac4+9BCn8ZEs7IBrMYzVtPYPSnjaPjfSDJXXNwGtdq",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-11T17:46:05.010Z",
+                          "weekday": "2",
+                          "day_period": "afternoon",
+                          "created_at": "2022-11-14T16:56:40.127Z"
+                        },
+                        {
+                          "flow_event_id": "KUq8p0RBOBSxrTcX77/9B2i+CqIW4mfcshdStCUd2dGw2zzlroRIAejHHiFxMXci",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-06T14:39:44.808Z",
+                          "weekday": "4",
+                          "day_period": "afternoon",
+                          "created_at": "2022-11-14T16:56:40.125Z"
+                        },
+                        {
+                          "flow_event_id": "np7vIJfI+XPUzdaer9QWZ7lm6bXYn9ncqjg0PqTZv5QjWWziLTDKDobZt+4xKviE",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-01T07:47:19.000Z",
+                          "weekday": "6",
+                          "day_period": "morning",
+                          "created_at": "2022-11-14T16:56:40.123Z"
+                        },
+                        {
+                          "flow_event_id": "nfqUJAOz8XCAg/xmW9EZUHYuZL9FIx/QcyuINomLpeMX5UeeGLM6F/ShMXYTJjFz",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-07T11:56:08.999Z",
+                          "weekday": "5",
+                          "day_period": "morning",
+                          "created_at": "2022-11-14T16:56:40.120Z"
+                        },
+                        {
+                          "flow_event_id": "3lFW+4b8bpq1q1nndGcyJtfhc///f3MXzk77zYeZhUDDSj/FSrc8A+l+efKfSKza",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-13T11:26:41.000Z",
+                          "weekday": "4",
+                          "day_period": "morning",
+                          "created_at": "2022-11-14T16:56:40.119Z"
+                        },
+                        {
+                          "flow_event_id": "Vja2oU8mZ3CnsvCFrq/gffr9a3R+v07upxN0gFe0SDTv7+0TJgc6ZvIqR4IpXWgd",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-25T05:20:24.054Z",
+                          "weekday": "2",
+                          "day_period": "night",
+                          "created_at": "2022-11-14T16:56:40.116Z"
+                        },
+                        {
+                          "flow_event_id": "dg8PIPdQRzjpj95TT21wNwrdlPtPRLZK5cToy0+MqWonODrOnfc2Xwd7svdbdUfc",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-03T20:22:34.112Z",
+                          "weekday": "1",
+                          "day_period": "night",
+                          "created_at": "2022-11-14T16:56:40.115Z"
+                        },
+                        {
+                          "flow_event_id": "h+7nGy16xT7qajAodwiJjl+q8KzF1eg7gycIKQzHaBGtghH/t5Pgf+V5PnGeEULX",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-06T16:50:35.688Z",
+                          "weekday": "4",
+                          "day_period": "afternoon",
+                          "created_at": "2022-11-14T16:56:40.112Z"
+                        },
+                        {
+                          "flow_event_id": "N7I7JvxIUKIyuzbMCM77zFMJSF9qwiZXn+VyoWoMlvN5MYQ6CoDFEQgt6aTFCSoH",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-18T16:17:13.857Z",
+                          "weekday": "2",
+                          "day_period": "afternoon",
+                          "created_at": "2022-11-14T16:56:40.110Z"
+                        },
+                        {
+                          "flow_event_id": "+YgTpZ61elVgD4pR0pVKntF4s5b48kvLUQoDjmolgw0/1g4YrqPkcu1di9ojqZwH",
+                          "competitor_id": "226152074079389",
+                          "event_date": "2017-07-05T19:51:36.000Z",
+                          "weekday": "3",
+                          "day_period": "night",
+                          "created_at": "2022-11-14T16:56:40.105Z"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/competitors/competitor": {
+      "description": "Show competitor by name",
+      "get": {
+        "tags": ["Competitor"],
+        "summary": "Show competitor by name.",
+        "description": "Show competitor by name.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "competitor_name": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "competitor_name": "A Cabrita Café"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cod_concorrente": {
+                      "type": "string"
+                    },
+                    "nome_concorrente": {
+                      "type": "string"
+                    },
+                    "preco_praticado": {
+                      "type": "string"
+                    },
+                    "bairro": {
+                      "type": "string"
+                    },
+                    "população": {
+                      "type": "string"
+                    },
+                    "densidade": {
+                      "type": "string"
+                    },
+                    "fluxo_medio": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "segunda-feira": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "terça-feira": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "quarta-feira": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "quinta-feira": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "sexta-feira": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "sábado": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "domingo": {
+                                "content": {
+                                  "application/json": {
+                                    "schema": {
+                                      "type": "object",
+                                      "properties": {
+                                        "manhã": {
+                                          "type": "string"
+                                        },
+                                        "tarde": {
+                                          "type": "string"
+                                        },
+                                        "noite": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "cod_concorrente": "996711610414287",
+                    "nome_concorrente": "A Cabrita Café",
+                    "endereço": "Rua Dr. Heitor Penteado, 1085, 13108002 Joaquim Egídio, Sao Paulo, Brazil",
+                    "preco_praticado": "1",
+                    "bairro": "APA Zona Urbana (Sousas Joaquim Egídio)",
+                    "população": "19421",
+                    "densidade": "901",
+                    "fluxo_medio": {
+                      "segunda-feira": {
+                        "manhã": 0,
+                        "tarde": 0,
+                        "noite": 0
+                      },
+                      "terça-feira": {
+                        "manhã": 1,
+                        "tarde": 0,
+                        "noite": 2
+                      },
+                      "quarta-feira": {
+                        "manhã": 1,
+                        "tarde": 0,
+                        "noite": 0
+                      },
+                      "quinta-feira": {
+                        "manhã": 1,
+                        "tarde": 1,
+                        "noite": 0
+                      },
+                      "sexta-feira": {
+                        "manhã": 1,
+                        "tarde": 0,
+                        "noite": 0
+                      },
+                      "sábado": {
+                        "manhã": 0,
+                        "tarde": 1,
+                        "noite": 1
+                      },
+                      "domingo": {
+                        "manhã": 0,
+                        "tarde": 0,
+                        "noite": 0
+                      }
+                    }
                   }
                 }
               }

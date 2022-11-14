@@ -1,10 +1,10 @@
-import { Connection } from "typeorm";
+import { DataSource } from "typeorm";
 
-import createConnection from "@shared/infra/typeorm";
+import { createConnection } from "@shared/infra/typeorm";
 
-let connection: Connection;
+let connection: DataSource;
 
-async function openConnection(): Promise<Connection> {
+async function openConnection(): Promise<DataSource> {
   connection = await createConnection();
 
   await connection.runMigrations();
@@ -14,7 +14,7 @@ async function openConnection(): Promise<Connection> {
 
 async function closeConnection(): Promise<void> {
   await connection.dropDatabase();
-  await connection.close();
+  await connection.destroy();
 }
 
 export { openConnection, closeConnection };

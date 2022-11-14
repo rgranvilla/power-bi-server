@@ -1,5 +1,3 @@
-import { hash } from "bcrypt";
-
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { User } from "../../infra/typeorm/entities/User";
 import { IUsersRepository } from "../IUsersRepository";
@@ -15,13 +13,11 @@ class UsersRepositoryInMemory implements IUsersRepository {
   }: ICreateUserDTO): Promise<User> {
     const user = new User();
 
-    const passwordHash = await hash(password, 8);
-
     Object.assign(user, {
       username,
       avatar,
       email,
-      password: passwordHash,
+      password,
     });
 
     this.users.push(user);

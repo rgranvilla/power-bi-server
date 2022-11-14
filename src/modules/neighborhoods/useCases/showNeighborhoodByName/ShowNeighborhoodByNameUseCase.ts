@@ -4,21 +4,21 @@ import { Neighborhood } from "@modules/neighborhoods/infra/typeorm/entities/Neig
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 
 @injectable()
-class ShowNeighborhoodsUseCase {
+class ShowNeighborhoodByNameUseCase {
   constructor(
     @inject("NeighborhoodsRepository")
     private neiborhoodsRepository: INeighborhoodsRepository
   ) {}
 
-  async execute({ page, take, orderDirection }): Promise<Neighborhood[]> {
-    const neighborhoods =
-      await this.neiborhoodsRepository.getPaginateNeighborhoods({
-        page,
-        take,
-        orderDirection,
-      });
+  async execute({ name, city, state }): Promise<Neighborhood> {
+    const neighborhoods = await this.neiborhoodsRepository.findNeighborhood({
+      name,
+      city,
+      state,
+    });
+
     return neighborhoods;
   }
 }
 
-export { ShowNeighborhoodsUseCase };
+export { ShowNeighborhoodByNameUseCase };

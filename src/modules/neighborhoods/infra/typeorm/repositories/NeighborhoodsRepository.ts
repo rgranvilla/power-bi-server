@@ -2,7 +2,10 @@ import { isEmpty } from "lodash";
 import { Repository } from "typeorm";
 
 import { INeighborhoodDTO } from "@modules/neighborhoods/dtos/INeighborhoodDTO";
-import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
+import {
+  INeighborhoodsRepository,
+  IPaginateNeighbors,
+} from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 import dataSource from "@shared/infra/typeorm";
 
 import { Neighborhood } from "../entities/Neighborhood";
@@ -15,24 +18,22 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
   }
 
   async create({
-    id,
-    neighborhood,
     neighborhood_id,
+    name,
     city,
     state,
     area,
   }: INeighborhoodDTO): Promise<Neighborhood> {
     const neighbor = this.repository.create({
-      id,
-      neighborhood,
       neighborhood_id,
+      name,
       city,
       state,
       area,
     });
 
-    const alreadyExist = await this.repository.findOneBy({
-      neighborhood,
+    const alreadyExist = await this.neighborAlreadyExist({
+      name,
       city,
       state,
     });
@@ -51,16 +52,16 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
   }
 
   async findNeighborhood({
-    neighborhood,
+    name,
     city,
     state,
   }: {
-    neighborhood: string;
+    name: string;
     city: string;
     state: string;
   }): Promise<Neighborhood> {
     const neighbor = await this.repository.findOneBy({
-      neighborhood,
+      name,
       city,
       state,
     });
@@ -75,16 +76,16 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
   }
 
   async neighborAlreadyExist({
-    neighborhood,
+    name,
     city,
     state,
   }: {
-    neighborhood: string;
+    name: string;
     city: string;
     state: string;
   }): Promise<boolean> {
     const neighbor = await this.repository.findOneBy({
-      neighborhood,
+      name,
       city,
       state,
     });
@@ -92,6 +93,22 @@ class NeighborhoodsRepository implements INeighborhoodsRepository {
     const alreadyExist = !isEmpty(neighbor);
 
     return alreadyExist;
+  }
+
+  async getPaginateNeighborhoods({
+    page,
+    take,
+    orderDirection,
+  }: IPaginateNeighbors): Promise<Neighborhood[]> {
+    const competitors = await this.repository
+      .createQueryBuilder("neighborhoods")
+      .orderBy("neighborhoods.name", orderDirection)
+      .leftJoinAndSelect("neighborhoods.population", "population")
+      .skip(page)
+      .take(take)
+      .getMany();
+
+    return competitors;
   }
 }
 

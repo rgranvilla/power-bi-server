@@ -2,31 +2,26 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from "typeorm";
 
-import { NeighborCompetitor } from "@modules/neighborsCompetitors/infra/typeorm/entities/NeighborCompetitor";
+import { Competitor } from "@modules/competitors/infra/typeorm/entities/Competitor";
 
 import { Population } from "./Population";
 
-@Entity("neighborhoods")
+@Entity("neighborhood")
 class Neighborhood {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
-  @Column()
+  @PrimaryColumn()
   neighborhood_id: string;
 
-  @OneToOne(() => Population, (population) => population.neighborhood, {
-    eager: true,
-    cascade: true,
-  })
-  neighbor_population: Population;
+  @Column()
+  population_id: string;
 
   @Column()
-  neighborhood: string;
+  name: string;
 
   @Column()
   city: string;
@@ -37,8 +32,15 @@ class Neighborhood {
   @Column()
   area: string;
 
-  @OneToMany(() => NeighborCompetitor, (competitor) => competitor.neighborhood)
-  neighbor_competitors: NeighborCompetitor[];
+  @OneToOne(() => Population, (population) => population.population_id, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: "population_id" })
+  population: Population;
+
+  @OneToMany(() => Competitor, (competitor) => competitor.neighborhood)
+  competitors: Competitor[];
 
   @CreateDateColumn()
   created_at: Date;

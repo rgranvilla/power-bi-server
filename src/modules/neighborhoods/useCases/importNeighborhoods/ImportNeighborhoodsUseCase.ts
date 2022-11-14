@@ -5,14 +5,6 @@ import { inject, injectable } from "tsyringe";
 import { INeighborhoodDTO } from "@modules/neighborhoods/dtos/INeighborhoodDTO";
 import { INeighborhoodsRepository } from "@modules/neighborhoods/repositories/INeighborhoodsRepository";
 
-interface IImportNeighborhood {
-  neighborhood_id: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  area: string;
-}
-
 @injectable()
 class ImportNeighborhoodsUseCase {
   private neighborhoods: INeighborhoodDTO[] = [];
@@ -27,10 +19,10 @@ class ImportNeighborhoodsUseCase {
       await this.neighborhoodsRepository.getAllNeighborhoods();
   }
 
-  loadNeighborhoods(file: Express.Multer.File): Promise<IImportNeighborhood[]> {
+  loadNeighborhoods(file: Express.Multer.File): Promise<INeighborhoodDTO[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
-      const neighborhoods: IImportNeighborhood[] = [];
+      const neighborhoods: INeighborhoodDTO[] = [];
 
       const parseFile = parse({
         from_line: 2,
@@ -41,11 +33,11 @@ class ImportNeighborhoodsUseCase {
 
       parseFile
         .on("data", async (line) => {
-          const [neighborhood_id, neighborhood, city, state, area] = line;
+          const [neighborhood_id, name, city, state, area] = line;
 
           neighborhoods.push({
             neighborhood_id,
-            neighborhood,
+            name,
             city,
             state,
             area,
@@ -62,25 +54,21 @@ class ImportNeighborhoodsUseCase {
     });
   }
 
-  async createNeighborhood(
-    neighborhoods: IImportNeighborhood[]
-  ): Promise<void> {
+  async createNeighborhood(neighborhoods: INeighborhoodDTO[]): Promise<void> {
     if (neighborhoods.length > 0) {
       const neighbor = neighborhoods.shift();
 
-      const { neighborhood, neighborhood_id, city, state, area } = neighbor;
+      const { name, neighborhood_id, city, state, area } = neighbor;
 
       const neighborhoodAlreadyExists = this.neighborhoods.find(
         (item) =>
-          item.neighborhood === neighborhood &&
-          item.city === city &&
-          item.state === state
+          item.name === name && item.city === city && item.state === state
       );
 
       if (!neighborhoodAlreadyExists) {
         await this.neighborhoodsRepository.create({
-          neighborhood,
           neighborhood_id,
+          name,
           city,
           state,
           area,

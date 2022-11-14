@@ -1,16 +1,16 @@
-import { NeighborCompetitor } from "@modules/neighborsCompetitors/infra/typeorm/entities/NeighborCompetitor";
+import { Competitor } from "@modules/competitors/infra/typeorm/entities/Competitor";
 
 import { Population } from "../infra/typeorm/entities/Population";
 
 interface INeighborhoodDTO {
-  id?: string;
   neighborhood_id: string;
-  neighborhood: string;
+  population_id?: string;
+  name: string;
   city: string;
   state: string;
   area: string;
-  neighbor_population?: Population;
-  neighbor_competitors?: NeighborCompetitor[];
+  population?: Population;
+  competitors?: Competitor[];
 }
 
 export type { INeighborhoodDTO };

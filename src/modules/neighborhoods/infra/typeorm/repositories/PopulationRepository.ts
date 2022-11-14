@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 
-import { ICreatePopulationDTO } from "@modules/neighborhoods/dtos/ICreatePopulationDTO";
+import { IPopulationDTO } from "@modules/neighborhoods/dtos/IPopulationDTO";
 import { IPopulationRepository } from "@modules/neighborhoods/repositories/IPopulationRepository";
 import dataSource from "@shared/infra/typeorm";
 
@@ -15,19 +15,24 @@ class PopulationRepository implements IPopulationRepository {
   }
 
   async create({
+    neighborhood_id,
     population,
     neighborhood,
-  }: ICreatePopulationDTO): Promise<Population> {
+  }: IPopulationDTO): Promise<Population> {
+    const demographic_density = (+population / +neighborhood.area).toFixed(0);
     const neighborPopulation = this.repository.create({
+      population_id: neighborhood_id,
       population,
+      demographic_density,
       neighborhood,
+      neighborhood_id,
     });
 
     await this.repository
       .createQueryBuilder()
-      .relation(Neighborhood, "neighbor_population")
+      .relation(Neighborhood, "population")
       .of(neighborhood)
-      .set(neighborPopulation.id);
+      .set(neighborPopulation.population_id);
 
     const res = await this.repository.save(neighborPopulation);
 

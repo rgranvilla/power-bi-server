@@ -4,22 +4,28 @@ import {
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from "typeorm";
 
 import { Neighborhood } from "./Neighborhood";
 
-@Entity("populations")
+@Entity("population")
 class Population {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryColumn()
+  population_id: string;
 
-  @OneToOne(() => Neighborhood, (neighbor) => neighbor.neighbor_population)
-  @JoinColumn()
-  neighborhood: Neighborhood;
+  @Column()
+  neighborhood_id: string;
 
   @Column()
   population: string;
+
+  @Column()
+  demographic_density: string;
+
+  @OneToOne(() => Neighborhood, (neighbor) => neighbor.neighborhood_id)
+  @JoinColumn({ name: "neighborhood_id" })
+  neighborhood: Neighborhood;
 
   @CreateDateColumn()
   created_at: Date;
