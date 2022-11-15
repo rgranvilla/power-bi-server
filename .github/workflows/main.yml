@@ -43,5 +43,7 @@ jobs:
           script: |
             cd ~/app/power-bi-server
             yarn
+            cp docker-compose.production.yml docker-compose.yml
+            cp ./src/shared/infra/typeorm/.index.production.ts src/shared/infra/typeorm/index.ts
             ./node_modules/.bin/typeorm migration:run -d dist/shared/infra/typeorm/index.js
             pm2 restart powerbi_api
