@@ -45,6 +45,6 @@ jobs:
             yarn
             cp docker-compose.production.yml docker-compose.yml
             cp ./src/shared/infra/typeorm/.index.production.ts src/shared/infra/typeorm/index.ts
-            ./node_modules/.bin/typeorm migration:run -d dist/shared/infra/typeorm/index.js
+            ./node_modules/.bin/typeorm migration:run -d src/shared/infra/typeorm/index.ts
             yarn seed:admin
             pm2 restart powerbi_api
